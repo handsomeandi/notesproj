@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="10dp">
-    <TextView
-        android:id="@+id/cardNoteTitleTv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:text="Note"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        />
+<layout>
+    <data>
+        <variable
+            name="onNoteClickListener"
+            type="com.example.notesproject.creatednotes.OnNoteClickListener" />
 
-</androidx.cardview.widget.CardView>
+        <variable
+            name="noteCard"
+            type="com.example.notesproject.db.Note" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:onClick="@{() -> onNoteClickListener.onClick(noteCard.id)}"
+        android:layout_margin="10dp">
+        <TextView
+                android:id="@+id/cardNoteTitleTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="@{noteCard.title}"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                />
+    </androidx.cardview.widget.CardView>
+
+</layout>
+
+
+

@@ -34,10 +34,12 @@ class CreatedNotesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = NotesRecyclerViewAdapter()
-        adapter.onClick = {
-            Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+        adapter = NotesRecyclerViewAdapter{ id ->
+            Toast.makeText(context,id,Toast.LENGTH_SHORT).show()
         }
+//        adapter.onClick = {
+//            Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+//        }
 
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
         notesRecyclerView.let{
@@ -45,27 +47,28 @@ class CreatedNotesFragment : Fragment() {
             it.adapter = adapter
         }
 
-        adapter.setItems(sampleData())
-
-        viewModel.some_fun()
-    }
-
-    fun sampleData() : ArrayList<Note>{
-        return arrayListOf(
-            Note(1,"Title1", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none"),
-            Note(2,"Title2", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none"),
-            Note(3,"Title3", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none"),
-            Note(4,"Title4", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none"),
-            Note(5,"Title5", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none"),
-            Note(6,"Title6", "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ", "30.05.2002", "15.07.2002", "none")
-        )
-
-
+        initObserver()
 
     }
+
+    private fun initObserver() {
+        viewModel.notes.observe(viewLifecycleOwner, { notes ->
+            adapter.setItems(notes)
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPhotos()
+    }
+
+
+
+
+
+}
 
 //    override fun onActivityCreated(savedInstanceState: Bundle?) {
 //        super.onActivityCreated(savedInstanceState)
 //    }
 
-}
