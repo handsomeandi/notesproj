@@ -1,6 +1,7 @@
-package com.example.notesproject.db
+package com.example.notesproject.data.db
 
 import androidx.room.*
+import com.example.notesproject.data.model.Note
 
 @Dao
 interface NoteDao {
@@ -12,7 +13,7 @@ interface NoteDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addNote(note:Note)
+    fun addNote(note: Note)
 
     @Delete
     fun deleteNote(note: Note)

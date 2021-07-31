@@ -1,4 +1,4 @@
-package com.example.notesproject.newnote
+package com.example.notesproject.ui.newnote
 
 import androidx.lifecycle.ViewModel
 

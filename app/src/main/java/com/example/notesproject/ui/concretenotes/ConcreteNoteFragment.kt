@@ -1,4 +1,4 @@
-package com.example.notesproject.concretenote
+package com.example.notesproject.ui.concretenotes
 
 import android.os.Bundle
 import android.view.LayoutInflater

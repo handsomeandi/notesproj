@@ -1,4 +1,4 @@
-package com.example.notesproject.creatednotes
+package com.example.notesproject.ui.creatednotes
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.notesproject.db.Note
+import com.example.notesproject.data.model.Note
 import com.example.notesproject.R
 import com.example.notesproject.databinding.NoteItemBinding
 

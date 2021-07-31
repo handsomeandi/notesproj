@@ -1,4 +1,4 @@
-package com.example.notesproject.di
+package com.example.notesproject
 
 
 import android.app.Application

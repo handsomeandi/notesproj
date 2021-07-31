@@ -1,9 +1,9 @@
-package com.example.notesproject.di
+package com.example.notesproject.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.notesproject.db.MyDB
-import com.example.notesproject.db.NoteDao
+import com.example.notesproject.data.db.MyDB
+import com.example.notesproject.data.db.NoteDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

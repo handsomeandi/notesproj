@@ -1,4 +1,4 @@
-package com.example.notesproject.concretenote
+package com.example.notesproject.ui.concretenotes
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

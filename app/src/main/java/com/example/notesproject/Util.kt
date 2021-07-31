@@ -1,6 +1,6 @@
 package com.example.notesproject
 
-import com.example.notesproject.db.Note
+import com.example.notesproject.data.model.Note
 
 object Util {
     fun sampleData() : ArrayList<Note>{

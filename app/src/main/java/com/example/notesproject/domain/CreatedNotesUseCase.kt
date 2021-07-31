@@ -1,7 +1,7 @@
-package com.example.notesproject.creatednotes
+package com.example.notesproject.domain
 
-import com.example.notesproject.db.Note
-import com.example.notesproject.repository.NotesRepository
+import com.example.notesproject.data.model.Note
+import com.example.notesproject.data.repository.NotesRepository
 import javax.inject.Inject
 
 class CreatedNotesUseCase @Inject constructor(private val repository: NotesRepository) {

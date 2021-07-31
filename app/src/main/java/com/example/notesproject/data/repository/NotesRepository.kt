@@ -1,6 +1,7 @@
-package com.example.notesproject.repository
+package com.example.notesproject.data.repository
 
-import com.example.notesproject.db.Note
+import com.example.notesproject.data.repository.handlers.DBHandler
+import com.example.notesproject.data.model.Note
 import javax.inject.Inject
 
 

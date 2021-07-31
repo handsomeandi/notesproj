@@ -1,15 +1,14 @@
-package com.example.notesproject.creatednotes
+package com.example.notesproject.ui.creatednotes
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notesproject.Util
-import com.example.notesproject.db.Note
+import com.example.notesproject.data.model.Note
+import com.example.notesproject.domain.CreatedNotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,10 +1,10 @@
-package com.example.notesproject
+package com.example.notesproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
-import androidx.lifecycle.ViewModel
-import com.example.notesproject.creatednotes.CreatedNotesFragment
+import com.example.notesproject.R
+import com.example.notesproject.ui.creatednotes.CreatedNotesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
