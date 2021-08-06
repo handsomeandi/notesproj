@@ -8,10 +8,10 @@ class CreatedNotesUseCase @Inject constructor(private val repository: NotesRepos
 
     fun getAllNotes() = repository.getAllNotes()
 
-    fun getNoteById(id : Int) = repository.getNoteById(id)
+    fun getNoteById(id: Int) = repository.getNoteById(id)
 
     fun addNote(note: Note) = repository.addNote(note)
 
-    fun deleteNote(note : Note) = repository.deleteNote(note)
+    fun deleteNote(note: Note) = repository.deleteNote(note)
 
 }

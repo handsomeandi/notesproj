@@ -9,9 +9,9 @@ class DBHandler @Inject constructor(private val dao: NoteDao) {
 
     fun getAllNotes() = dao.getAllNotes()
 
-    fun getNoteById(id : Int) = dao.getNoteById(id)
+    fun getNoteById(id: Int) = dao.getNoteById(id)
 
     fun addNote(note: Note) = dao.addNote(note)
 
-    fun deleteNote(note : Note) = dao.deleteNote(note)
+    fun deleteNote(note: Note) = dao.deleteNote(note)
 }

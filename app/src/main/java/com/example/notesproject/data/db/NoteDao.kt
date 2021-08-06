@@ -9,7 +9,7 @@ interface NoteDao {
     fun getAllNotes(): List<Note>
 
     @Query("SELECT * FROM notesTable WHERE id = :id")
-    fun getNoteById(id:Int) : Note?
+    fun getNoteById(id: Int): Note?
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -17,13 +17,4 @@ interface NoteDao {
 
     @Delete
     fun deleteNote(note: Note)
-
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insertAll(vararg users: TownClass)
-//
-//    @Delete
-//    fun delete(user: TownClass)
-//
-//    @Query("DELETE FROM " + Constants.TOWN_TABLE)
-//    fun deleteAll()
 }

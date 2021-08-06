@@ -33,16 +33,13 @@ class CreatedNotesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = NotesRecyclerViewAdapter{ id ->
-            Toast.makeText(context,id,Toast.LENGTH_SHORT).show()
+        adapter = NotesRecyclerViewAdapter { id ->
+            Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
         }
-//        adapter.onClick = {
-//            Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
-//        }
-
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
-        notesRecyclerView.let{
-            it.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+        notesRecyclerView.let {
+            it.layoutManager =
+                LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
             it.adapter = adapter
         }
 
@@ -61,13 +58,5 @@ class CreatedNotesFragment : Fragment() {
         viewModel.getPhotos()
     }
 
-
-
-
-
 }
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//    }
 

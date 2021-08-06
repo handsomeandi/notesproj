@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="onNoteClickListener"
-            type="com.example.notesproject.creatednotes.OnNoteClickListener" />
+            type="com.example.notesproject.ui.creatednotes.OnNoteClickListener" />
 
         <variable
             name="noteCard"
-            type="com.example.notesproject.db.Note" />
+            type="com.example.notesproject.data.model.Note" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:onClick="@{() -> onNoteClickListener.onClick(noteCard.id)}"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:onClick="@{() -> onNoteClickListener.onClick(noteCard.id)}">
+
         <TextView
-                android:id="@+id/cardNoteTitleTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:text="@{noteCard.title}"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                />
+            android:id="@+id/cardNoteTitleTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="@{noteCard.title}"
+            android:textSize="25sp" />
     </androidx.cardview.widget.CardView>
 
 </layout>

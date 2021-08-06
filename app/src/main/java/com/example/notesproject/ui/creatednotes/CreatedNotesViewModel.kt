@@ -22,10 +22,8 @@ class CreatedNotesViewModel @Inject constructor(
 
     fun getPhotos(){
         viewModelScope.launch{
-//            val notes = notesUseCase.getAllNotes()
             val notes = Util.sampleData()
             _notes.value = notes
-//            _notes.value = notes
         }
     }
 
