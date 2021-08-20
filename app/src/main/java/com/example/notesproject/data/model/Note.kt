@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "notesTable")
 data class Note(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    var title: String,
-    var noteText: String,
+    val title: String,
+    val noteText: String,
     val createdDate: String,
     val updatedDate: String,
-    var images: String
+    val images: String
 )

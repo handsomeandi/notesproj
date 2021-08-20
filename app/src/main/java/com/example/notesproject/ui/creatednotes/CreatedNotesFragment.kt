@@ -10,9 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesproject.R
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+
 class CreatedNotesFragment : Fragment() {
 
     companion object {

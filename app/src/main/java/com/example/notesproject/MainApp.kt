@@ -2,8 +2,9 @@ package com.example.notesproject
 
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.example.notesproject.data.di.DaggerAppComponent
 
 
-@HiltAndroidApp
-class MainApp : Application()
+object MainApp : Application() {
+    val appComponent = DaggerAppComponent.create()
+}

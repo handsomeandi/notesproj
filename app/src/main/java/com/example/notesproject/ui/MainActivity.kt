@@ -1,14 +1,12 @@
 package com.example.notesproject.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.example.notesproject.R
-import com.example.notesproject.ui.creatednotes.CreatedNotesFragment
 import com.example.notesproject.ui.newnote.NewNoteFragment
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var frameLayout: FrameLayout
@@ -17,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         frameLayout = findViewById(R.id.frameLay)
-        supportFragmentManager.beginTransaction().add(R.id.frameLay, NewNoteFragment.newInstance()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.frameLay, NewNoteFragment.newInstance())
+            .commit()
     }
 }

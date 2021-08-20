@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/createdNotesFragment">
+    <fragment
+        android:id="@+id/createdNotesFragment"
+        android:name="com.example.notesproject.ui.creatednotes.CreatedNotesFragment"
+        android:label="CreatedNotesFragment">
+        <action
+            android:id="@+id/action_createdNotesFragment_to_concreteNoteFragment"
+            app:destination="@id/concreteNoteFragment" />
+        <action
+            android:id="@+id/action_createdNotesFragment_to_newNoteFragment2"
+            app:destination="@id/newNoteFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/concreteNoteFragment"
+        android:name="com.example.notesproject.ui.concretenotes.ConcreteNoteFragment"
+        android:label="concrete_note_fragment"
+        tools:layout="@layout/concrete_note_fragment" >
+    </fragment>
+    <fragment
+        android:id="@+id/newNoteFragment2"
+        android:name="com.example.notesproject.ui.newnote.NewNoteFragment"
+        android:label="new_note_fragment"
+        tools:layout="@layout/new_note_fragment" />
+    <fragment
+        android:id="@+id/updateNoteFragment"
+        android:name="com.example.notesproject.ui.updatenotes.UpdateNoteFragment"
+        android:label="update_note_fragment"
+        tools:layout="@layout/update_note_fragment" />
+
+    <action
+        android:id="@+id/action_concreteNoteFragment_to_updateNoteFragment"
+        app:destination="@id/updateNoteFragment" />
+</navigation>
