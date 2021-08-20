@@ -10,11 +10,11 @@ import javax.inject.Singleton
 
 
 @Module
-class DbModule{
+class DbModule(private val app: Application){
 
     @Singleton
     @Provides
-    fun provideDB(app: Application): MyDB {
+    fun provideDB(): MyDB {
         return Room.databaseBuilder(app, MyDB::class.java, "DB_NAME").build()
     }
 

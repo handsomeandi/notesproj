@@ -9,7 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notesproject.MainApp
 import com.example.notesproject.R
+import com.example.notesproject.data.di.AppComponent
+import kotlinx.coroutines.MainScope
+import javax.inject.Inject
 
 
 class CreatedNotesFragment : Fragment() {
@@ -18,7 +22,8 @@ class CreatedNotesFragment : Fragment() {
         fun newInstance() = CreatedNotesFragment()
     }
 
-    private val viewModel: CreatedNotesViewModel by viewModels()
+    @Inject
+    lateinit var viewModel: CreatedNotesViewModel
 
     private lateinit var notesRecyclerView: RecyclerView
 
@@ -32,6 +37,9 @@ class CreatedNotesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        MainApp.instance.appComponent?.let {
+            it.inject(this)
+        }
         adapter = NotesRecyclerViewAdapter { id ->
             Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -43,8 +51,8 @@ class CreatedNotesFragment : Fragment() {
         }
 
         initObserver()
-
     }
+
 
     private fun initObserver() {
         viewModel.notes.observe(viewLifecycleOwner, { notes ->
