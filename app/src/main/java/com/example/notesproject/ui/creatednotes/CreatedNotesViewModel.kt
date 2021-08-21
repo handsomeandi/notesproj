@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.notesproject.Util
 import com.example.notesproject.data.model.Note
 import com.example.notesproject.domain.CreatedNotesUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,11 +20,13 @@ class CreatedNotesViewModel @Inject constructor(
     val notes : LiveData<ArrayList<Note>> = _notes
 
 
-    fun getPhotos(){
-        viewModelScope.launch{
-            val notes = Util.sampleData()
-            _notes.value = notes
-        }
+    fun onCreate(){
+        getPhotos()
+    }
+
+    private fun getPhotos(){
+        val notes = Util.sampleData()
+        _notes.postValue(notes)
     }
 
 }

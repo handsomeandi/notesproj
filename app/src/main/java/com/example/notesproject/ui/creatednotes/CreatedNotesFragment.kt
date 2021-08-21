@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notesproject.MainApp
 import com.example.notesproject.R
+import com.example.notesproject.Util.setStatusBarColor
 import com.example.notesproject.data.di.AppComponent
 import kotlinx.coroutines.MainScope
 import javax.inject.Inject
@@ -37,11 +40,11 @@ class CreatedNotesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        MainApp.instance.appComponent?.let {
-            it.inject(this)
-        }
+        MainApp.instance.appComponent?.inject(this)
         adapter = NotesRecyclerViewAdapter { id ->
-            Toast.makeText(context, id.toString(), Toast.LENGTH_SHORT).show()
+            findNavController().run {
+                this.navigate(CreatedNotesFragmentDirections.actionCreatedNotesFragmentToConcreteNoteFragment(id))
+            }
         }
         notesRecyclerView = view.findViewById(R.id.notesRecyclerView)
         notesRecyclerView.let {
@@ -49,7 +52,7 @@ class CreatedNotesFragment : Fragment() {
                 LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
             it.adapter = adapter
         }
-
+        viewModel.onCreate()
         initObserver()
     }
 
@@ -62,8 +65,7 @@ class CreatedNotesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getPhotos()
+        activity?.setStatusBarColor(R.color.white, false)
     }
-
 }
 
