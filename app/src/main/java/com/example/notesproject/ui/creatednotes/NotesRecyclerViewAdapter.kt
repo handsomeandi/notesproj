@@ -16,7 +16,7 @@ class NotesRecyclerViewAdapter constructor(private val noteClickListener: OnNote
         private val binding = DataBindingUtil.bind<NoteItemBinding>(itemView)
         fun setData(note: Note) {
             this.note = note
-            binding?.cardNoteTitleTv?.text = this.note?.title
+            binding?.tvCardNoteTitle?.text = this.note?.title
             bind(note)
         }
 

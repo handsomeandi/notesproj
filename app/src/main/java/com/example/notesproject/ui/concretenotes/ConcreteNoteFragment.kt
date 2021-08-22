@@ -1,36 +1,32 @@
 package com.example.notesproject.ui.concretenotes
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.example.notesproject.R
+import com.example.notesproject.Util
+import com.example.notesproject.databinding.ConcreteNoteFragmentBinding
+import com.example.notesproject.ui.BaseFragment
+import javax.inject.Inject
 
 
-class ConcreteNoteFragment : Fragment() {
+class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 
     private val args: ConcreteNoteFragmentArgs by navArgs()
 
+    @Inject
+    lateinit var viewModel: ConcreteNoteViewModel
 
-    //TODO: inject
-    private lateinit var viewModel: ConcreteNoteViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.concrete_note_fragment, container, false)
-    }
+    override fun viewBindingInflate(): ConcreteNoteFragmentBinding =
+        ConcreteNoteFragmentBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toast.makeText(context,args.id.toString(), Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        fun newInstance() = ConcreteNoteFragment()
+        val note = Util.sampleData().find { it.id == args.id }
+        with(binding) {
+            note?.let {
+                tvNoteTitle.text = it.title
+                tvNoteBody.text = it.noteText
+            }
+        }
     }
 }

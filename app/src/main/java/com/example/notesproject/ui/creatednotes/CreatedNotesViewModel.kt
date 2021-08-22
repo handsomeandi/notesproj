@@ -1,5 +1,6 @@
 package com.example.notesproject.ui.creatednotes
 
+import androidx.core.view.KeyEventDispatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,17 +17,27 @@ class CreatedNotesViewModel @Inject constructor(
    private val notesUseCase: CreatedNotesUseCase
 ) : ViewModel() {
 
-    val _notes : MutableLiveData<ArrayList<Note>> = MutableLiveData()
+    private val _notes : MutableLiveData<ArrayList<Note>> = MutableLiveData()
     val notes : LiveData<ArrayList<Note>> = _notes
 
+    private val _currentEvent : MutableLiveData<Events> = MutableLiveData(Events.Initial)
+    val currentEvent: LiveData<Events> = _currentEvent
 
     fun onCreate(){
         getPhotos()
     }
 
-    private fun getPhotos(){
-        val notes = Util.sampleData()
-        _notes.postValue(notes)
+    fun onNotePressed(id: Int){
+        _currentEvent.value = Events.NotePressed(id)
     }
 
+    private fun getPhotos(){
+        val notes = Util.sampleData()
+        _notes.value =  notes
+    }
+
+    sealed interface Events{
+        object Initial : Events
+        class NotePressed(val id: Int) : Events
+    }
 }

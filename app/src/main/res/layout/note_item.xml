@@ -19,7 +19,7 @@
         android:onClick="@{() -> onNoteClickListener.onClick(noteCard.id)}">
 
         <TextView
-            android:id="@+id/cardNoteTitleTv"
+            android:id="@+id/tvCardNoteTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
