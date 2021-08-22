@@ -33,7 +33,11 @@
         android:id="@+id/updateNoteFragment"
         android:name="com.example.notesproject.ui.updatenotes.UpdateNoteFragment"
         android:label="update_note_fragment"
-        tools:layout="@layout/update_note_fragment" />
+        tools:layout="@layout/update_note_fragment">
+        <argument
+            android:name="id"
+            app:argType="integer"/>
+    </fragment>
 
     <action
         android:id="@+id/action_concreteNoteFragment_to_updateNoteFragment"

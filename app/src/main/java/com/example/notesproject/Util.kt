@@ -74,3 +74,7 @@ object Util {
         }
     }
 }
+
+infix fun View.clicker(onClickListener: View.OnClickListener){
+    setOnClickListener(onClickListener)
+}
