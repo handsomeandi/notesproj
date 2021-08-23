@@ -1,15 +1,11 @@
 package com.example.notesproject.ui.creatednotes
 
-import androidx.core.view.KeyEventDispatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.notesproject.Util
 import com.example.notesproject.data.model.Note
 import com.example.notesproject.domain.CreatedNotesUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -32,7 +28,7 @@ class CreatedNotesViewModel @Inject constructor(
     }
 
     private fun getPhotos(){
-        val notes = Util.sampleData()
+        val notes = Util.getSampleData()
         _notes.value =  notes
     }
 

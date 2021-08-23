@@ -1,78 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:context=".ui.updatenotes.UpdateNoteFragment">
 
-        <TextView
-            android:id="@+id/noteTitleLabel"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
-            android:text="Название"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="16dp"
+            android:text="Сохранить"
+            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/noteTextLabel"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
-            android:text="Текст"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/noteTitleLabel" />
-
-        <TextView
-            android:id="@+id/imagesLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="50dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="92dp"
-            android:text="Изображения"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/noteTextLabel" />
-
-        <EditText
-            android:id="@+id/etNoteTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="@+id/noteTitleLabel"
+            android:text="Отмена"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/noteTitleLabel"
-            app:layout_constraintTop_toTopOf="@+id/noteTitleLabel" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/etNoteBody"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
-            app:layout_constraintBottom_toBottomOf="@+id/noteTextLabel"
-            app:layout_constraintEnd_toEndOf="@+id/etNoteTitle"
-            app:layout_constraintStart_toStartOf="@+id/etNoteTitle"
-            app:layout_constraintTop_toTopOf="@+id/noteTextLabel" />
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/btnSave"
+            tools:layout_editor_absoluteX="16dp">
 
-        <ImageView
-            android:id="@+id/ivAddImageAction"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:src="@android:drawable/ic_menu_gallery"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagesLabel" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/noteTitleLabel"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Название"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/etNoteTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Name"
+                    app:layout_constraintBottom_toBottomOf="@+id/noteTitleLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/noteTitleLabel"
+                    app:layout_constraintTop_toTopOf="@+id/noteTitleLabel" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/noteTextLabel"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Текст"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/noteTitleLabel" />
+
+                <EditText
+                    android:id="@+id/etNoteBody"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="Name"
+                    app:layout_constraintBottom_toBottomOf="@+id/noteTextLabel"
+                    app:layout_constraintEnd_toEndOf="@+id/etNoteTitle"
+                    app:layout_constraintStart_toStartOf="@+id/etNoteTitle"
+                    app:layout_constraintTop_toTopOf="@+id/noteTextLabel" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/imagesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="Изображения"
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/noteTextLabel" />
+
+            <ImageView
+                android:id="@+id/ivAddImageAction"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_gallery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imagesLabel" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

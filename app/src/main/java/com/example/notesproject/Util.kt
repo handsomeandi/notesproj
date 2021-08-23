@@ -9,58 +9,71 @@ import androidx.core.content.ContextCompat
 import com.example.notesproject.data.model.Note
 
 object Util {
-    fun sampleData(): ArrayList<Note> {
-        return arrayListOf(
-            Note(
-                1,
-                "Title1",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            ),
-            Note(
-                2,
-                "Title2",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            ),
-            Note(
-                3,
-                "Title3",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            ),
-            Note(
-                4,
-                "Title4",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            ),
-            Note(
-                5,
-                "Title5",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            ),
-            Note(
-                6,
-                "Title6",
-                "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
-                "30.05.2002",
-                "15.07.2002",
-                "none"
-            )
+
+    private val sampleData: ArrayList<Note> = arrayListOf(
+        Note(
+            1,
+            "Title1",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
+        ),
+        Note(
+            2,
+            "Title2",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
+        ),
+        Note(
+            3,
+            "Title3",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
+        ),
+        Note(
+            4,
+            "Title4",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
+        ),
+        Note(
+            5,
+            "Title5",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
+        ),
+        Note(
+            6,
+            "Title6",
+            "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum ",
+            "30.05.2002",
+            "15.07.2002",
+            "none"
         )
+    )
+
+
+
+    fun getSampleData(): ArrayList<Note> {
+        return sampleData
     }
+
+    fun setSampleData(data: List<Note>){
+        sampleData.apply {
+            clear()
+            addAll(data)
+        }
+    }
+
     @Suppress("DEPRECATION")
     fun Activity.setStatusBarColor(@ColorRes statusBarColor: Int, lightTextColor: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -75,6 +88,6 @@ object Util {
     }
 }
 
-infix fun View.clicker(onClickListener: View.OnClickListener){
+infix fun View.clicker(onClickListener: View.OnClickListener) {
     setOnClickListener(onClickListener)
 }

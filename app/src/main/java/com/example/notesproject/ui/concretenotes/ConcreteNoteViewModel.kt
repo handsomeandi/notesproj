@@ -33,7 +33,7 @@ class ConcreteNoteViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun loadNote(id: Int) {
-        Util.sampleData().find { it.id == id }?.let {
+        Util.getSampleData().find { it.id == id }?.let {
             _note.value = it
         }
     }
