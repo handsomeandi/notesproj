@@ -13,7 +13,6 @@ class ConcreteNoteViewModel @Inject constructor() : ViewModel() {
     val currentEvent: LiveData<Events> = _currentEvent
 
     private val _note: MutableLiveData<Note> = MutableLiveData()
-
     val note: LiveData<Note> = _note
 
     fun onCreate(id: Int) {
@@ -23,6 +22,14 @@ class ConcreteNoteViewModel @Inject constructor() : ViewModel() {
     fun onDeletePressed() {
         note.value?.id?.let {
             _currentEvent.value = Events.DeletePressed(it)
+        }
+    }
+
+    fun onDelete(){
+        Util.getSampleData().apply {
+            remove(_note.value)
+            Util.setSampleData(this)
+            _currentEvent.value = Events.Deleted
         }
     }
 
@@ -42,6 +49,7 @@ class ConcreteNoteViewModel @Inject constructor() : ViewModel() {
     sealed class Events {
         object Initial : Events()
         class DeletePressed(id: Int) : Events()
+        object Deleted : Events()
         class UpdatePressed(id: Int) : Events()
     }
 }

@@ -10,7 +10,7 @@ import com.example.notesproject.data.model.Note
 
 object Util {
 
-    private val sampleData: ArrayList<Note> = arrayListOf(
+    private var sampleData: ArrayList<Note> = arrayListOf(
         Note(
             1,
             "Title1",
@@ -67,11 +67,8 @@ object Util {
         return sampleData
     }
 
-    fun setSampleData(data: List<Note>){
-        sampleData.apply {
-            clear()
-            addAll(data)
-        }
+    fun setSampleData(data: ArrayList<Note>){
+        sampleData = data
     }
 
     @Suppress("DEPRECATION")

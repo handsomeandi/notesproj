@@ -12,7 +12,7 @@
             android:id="@+id/action_createdNotesFragment_to_concreteNoteFragment"
             app:destination="@id/concreteNoteFragment" />
         <action
-            android:id="@+id/action_createdNotesFragment_to_newNoteFragment2"
+            android:id="@+id/action_createdNotesFragment_to_newNoteFragment"
             app:destination="@id/newNoteFragment2" />
     </fragment>
     <fragment

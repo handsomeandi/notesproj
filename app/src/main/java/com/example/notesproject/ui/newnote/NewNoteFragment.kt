@@ -1,27 +1,52 @@
 package com.example.notesproject.ui.newnote
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.example.notesproject.R
+import androidx.navigation.fragment.findNavController
+import com.example.notesproject.MainApp
+import com.example.notesproject.databinding.NewNoteFragmentBinding
+import com.example.notesproject.ui.BaseFragment
+import javax.inject.Inject
 
 
-class NewNoteFragment : Fragment() {
+class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 
-    companion object {
-        fun newInstance() = NewNoteFragment()
-    }
+	@Inject
+	lateinit var newNoteViewModel: NewNoteViewModel
 
-    private val viewModel: NewNoteViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.new_note_fragment, container, false)
-    }
+	override fun viewBindingInflate(): NewNoteFragmentBinding = NewNoteFragmentBinding.inflate(layoutInflater)
+
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		MainApp.instance.appComponent?.inject(this)
+		initViews()
+		initObservers()
+	}
+
+	private fun initViews() {
+		with(binding) {
+			viewModel = newNoteViewModel
+		}
+	}
+
+	private fun initObservers() {
+		newNoteViewModel.note.observe(viewLifecycleOwner) {
+			with(binding) {
+				etNoteTitle.setText(it.title)
+				etNoteBody.setText(it.noteText)
+			}
+		}
+		newNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
+			when (it) {
+				NewNoteViewModel.Events.AddPressed -> {
+					findNavController().popBackStack()
+				}
+				NewNoteViewModel.Events.Initial -> {
+				}
+			}
+		}
+	}
 
 }

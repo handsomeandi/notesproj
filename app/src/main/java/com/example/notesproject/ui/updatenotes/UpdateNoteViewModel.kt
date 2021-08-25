@@ -16,25 +16,21 @@ class UpdateNoteViewModel @Inject constructor() : ViewModel() {
     )
     val currentEvent: LiveData<Events> = _currentEvent
 
-    private val _note: MutableLiveData<Note> = MutableLiveData()
-    val note: LiveData<Note> = _note
+    val _note: MutableLiveData<Note?> = MutableLiveData()
+    val note: LiveData<Note?> = _note
 
     fun onCreate(id: Int) {
         loadNote(id)
     }
 
-    fun onSavePressed(title: String, body: String) {
+    fun onSavePressed() {
         val notes = Util.getSampleData().map {
             if (it.id == _note.value?.id) it.apply {
-                this.title = title
-                this.noteText = body
+                this.title = _note.value?.title ?: this.title
+                this.noteText = _note.value?.noteText ?: this.noteText
             } else it
         }
-        Util.setSampleData(notes)
-        _note.value = _note.value?.apply {
-            this.title = title
-            this.noteText = body
-        }
+        Util.setSampleData(arrayListOf (*notes.toTypedArray()))
         _currentEvent.value = Events.SavePressed
     }
 

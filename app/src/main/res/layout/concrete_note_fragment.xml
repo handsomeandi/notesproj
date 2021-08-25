@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.notesproject.ui.concretenotes.ConcreteNoteViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            tools:text="TextView"
+            android:text="@{viewModel.note.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline2" />
@@ -24,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            tools:text="TextView"
+            android:text="@{viewModel.note.noteText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle" />
@@ -45,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="Update"
+            android:onClick="@{() -> viewModel.onUpdatePressed()}"
             app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
             app:layout_constraintEnd_toStartOf="@+id/btnDelete"
             app:layout_constraintTop_toTopOf="@+id/btnDelete" />
@@ -56,6 +64,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="Delete"
+            android:onClick="@{() -> viewModel.onDeletePressed()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -17,41 +17,27 @@ class UpdateNoteFragment : BaseFragment<UpdateNoteFragmentBinding>() {
     private val args: UpdateNoteFragmentArgs by navArgs()
 
     @Inject
-    lateinit var viewModel: UpdateNoteViewModel
+    lateinit var updateNoteViewModel: UpdateNoteViewModel
 
     override fun viewBindingInflate(): UpdateNoteFragmentBinding =
         UpdateNoteFragmentBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         MainApp.instance.appComponent?.inject(this)
-        viewModel.onCreate(args.id)
+        updateNoteViewModel.onCreate(args.id)
         initViews()
         initObservers()
     }
 
     private fun initViews() {
         with(binding) {
-            btnSave clicker {
-                viewModel.onSavePressed(
-                    etNoteTitle.text.toString(),
-                    etNoteBody.text.toString()
-                )
-            }
-            btnCancel clicker {
-                viewModel.onCancelPressed()
-            }
+            viewModel = updateNoteViewModel
         }
     }
 
 
     private fun initObservers() {
-        viewModel.note.observe(viewLifecycleOwner) {
-            with(binding) {
-                etNoteTitle.setText(it.title)
-                etNoteBody.setText(it.noteText)
-            }
-        }
-        viewModel.currentEvent.observe(viewLifecycleOwner) {
+        updateNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
             when (it) {
                 UpdateNoteViewModel.Events.Initial -> {
                 }
