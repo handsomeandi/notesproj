@@ -4,8 +4,7 @@ import com.example.notesproject.data.model.Note
 import com.example.notesproject.data.repository.NotesRepository
 import javax.inject.Inject
 
-class GetAllNotesUseCase @Inject constructor(private val repository: NotesRepository) {
+class UpdateNoteUseCase @Inject constructor(private val repository: NotesRepository) {
 
-    fun execute() = repository.getAllNotes()
-
+	fun execute(note: Note) = repository.updateNote(note)
 }

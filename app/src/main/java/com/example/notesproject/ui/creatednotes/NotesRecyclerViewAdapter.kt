@@ -52,7 +52,7 @@ class NotesRecyclerViewAdapter constructor(private val noteClickListener: OnNote
         }
     }
 
-    fun setItems(notes: ArrayList<Note>) {
+    fun setItems(notes: List<Note>) {
         containerList = (ArrayList(notes))
         notifyDataSetChanged()
     }

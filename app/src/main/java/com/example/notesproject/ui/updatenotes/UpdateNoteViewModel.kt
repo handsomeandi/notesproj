@@ -1,52 +1,61 @@
 package com.example.notesproject.ui.updatenotes
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.notesproject.Util
 import com.example.notesproject.data.model.Note
+import com.example.notesproject.domain.GetNoteByIdUseCase
+import com.example.notesproject.domain.UpdateNoteUseCase
+import com.example.notesproject.logErrorMessage
+import com.example.notesproject.subscribeIoObserveMain
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-class UpdateNoteViewModel @Inject constructor() : ViewModel() {
+class UpdateNoteViewModel @Inject constructor(
+	private val updateNoteUseCase: UpdateNoteUseCase,
+	private val getNoteByIdUseCase: GetNoteByIdUseCase
+) : ViewModel() {
 
-    private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
-        Events.Initial
-    )
-    val currentEvent: LiveData<Events> = _currentEvent
+	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
+		Events.Initial
+	)
+	val currentEvent: LiveData<Events> = _currentEvent
 
-    val _note: MutableLiveData<Note?> = MutableLiveData()
-    val note: LiveData<Note?> = _note
+	val note: MutableLiveData<Note> = MutableLiveData()
 
-    fun onCreate(id: Int) {
-        loadNote(id)
-    }
+	fun onCreate(id: Int) {
+		loadNote(id)
+	}
 
-    fun onSavePressed() {
-        val notes = Util.getSampleData().map {
-            if (it.id == _note.value?.id) it.apply {
-                this.title = _note.value?.title ?: this.title
-                this.noteText = _note.value?.noteText ?: this.noteText
-            } else it
-        }
-        Util.setSampleData(arrayListOf (*notes.toTypedArray()))
-        _currentEvent.value = Events.SavePressed
-    }
+	fun onSavePressed() {
+		note.value?.let { note ->
+			updateNoteUseCase.execute(note).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe({
+					_currentEvent.value = Events.SavePressed
+				},
+				{
+					logErrorMessage(it.message)
+				})
+		}
+	}
 
-    fun onCancelPressed() {
-        _currentEvent.value = Events.CancelPressed
-    }
+	fun onCancelPressed() {
+		_currentEvent.value = Events.CancelPressed
+	}
 
-    private fun loadNote(id: Int) {
-        Util.getSampleData().find { it.id == id }?.let {
-            _note.value = it
-        }
-    }
+	private fun loadNote(id: Int) {
+		getNoteByIdUseCase.execute(id).subscribeIoObserveMain(
+			{ note.value = it },
+			{
+				logErrorMessage(it.message)
+			}
+		)
+	}
 
-    sealed class Events {
-        object Initial : Events()
-        object SavePressed : Events()
-        object CancelPressed : Events()
-    }
+	sealed class Events {
+		object Initial : Events()
+		object SavePressed : Events()
+		object CancelPressed : Events()
+	}
 }

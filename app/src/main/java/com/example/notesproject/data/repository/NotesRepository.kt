@@ -14,4 +14,7 @@ class NotesRepository @Inject constructor(private val dbHandler: DBHandler) {
     fun addNote(note: Note) = dbHandler.addNote(note)
 
     fun deleteNote(note: Note) = dbHandler.deleteNote(note)
+
+    fun updateNote(note: Note) = dbHandler.updateNote(note)
+
 }

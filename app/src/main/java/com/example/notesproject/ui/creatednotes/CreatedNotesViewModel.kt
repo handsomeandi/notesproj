@@ -1,24 +1,22 @@
 package com.example.notesproject.ui.creatednotes
 
-import androidx.core.view.KeyEventDispatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.notesproject.Util
 import com.example.notesproject.data.model.Note
-import com.example.notesproject.domain.CreatedNotesUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.notesproject.domain.GetAllNotesUseCase
+import com.example.notesproject.logErrorMessage
+import com.example.notesproject.subscribeIoObserveMain
+import io.reactivex.rxjava3.functions.Consumer
 import javax.inject.Inject
 
 
 class CreatedNotesViewModel @Inject constructor(
-	private val notesUseCase: CreatedNotesUseCase
+	private val getAllNotesUseCase: GetAllNotesUseCase
 ) : ViewModel() {
 
-	private val _notes: MutableLiveData<ArrayList<Note>> = MutableLiveData()
-	val notes: LiveData<ArrayList<Note>> = _notes
+	private val _notes: MutableLiveData<List<Note>> = MutableLiveData()
+	val notes: LiveData<List<Note>> = _notes
 
 	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(Events.Initial)
 	val currentEvent: LiveData<Events> = _currentEvent
@@ -31,13 +29,19 @@ class CreatedNotesViewModel @Inject constructor(
 		_currentEvent.value = Events.NotePressed(id)
 	}
 
-    fun onAddNotePressed(){
-        _currentEvent.value = Events.CreateNotePressed
-    }
+	fun onAddNotePressed() {
+		_currentEvent.value = Events.CreateNotePressed
+	}
 
 	private fun getPhotos() {
-		val notes = Util.getSampleData()
-		_notes.value = notes
+		getAllNotesUseCase.execute().subscribeIoObserveMain(
+			{
+				_notes.value = it
+			},
+			{
+				logErrorMessage(it.message)
+			}
+		)
 	}
 
 	sealed interface Events {
