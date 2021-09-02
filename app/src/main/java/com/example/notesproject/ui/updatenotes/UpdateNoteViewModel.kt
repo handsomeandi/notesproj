@@ -31,12 +31,9 @@ class UpdateNoteViewModel @Inject constructor(
 	fun onSavePressed() {
 		note.value?.let { note ->
 			updateNoteUseCase.execute(note).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-				.subscribe({
-					_currentEvent.value = Events.SavePressed
-				},
-				{
-					logErrorMessage(it.message)
-				})
+				.subscribe(
+					{ _currentEvent.value = Events.SavePressed },
+					{ logErrorMessage(it.message) })
 		}
 	}
 
@@ -47,9 +44,7 @@ class UpdateNoteViewModel @Inject constructor(
 	private fun loadNote(id: Int) {
 		getNoteByIdUseCase.execute(id).subscribeIoObserveMain(
 			{ note.value = it },
-			{
-				logErrorMessage(it.message)
-			}
+			{ logErrorMessage(it.message) }
 		)
 	}
 

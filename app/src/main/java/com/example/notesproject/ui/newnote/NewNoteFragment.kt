@@ -28,16 +28,11 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 	private fun initViews() {
 		with(binding) {
 			viewModel = newNoteViewModel
+			lifecycleOwner = viewLifecycleOwner
 		}
 	}
 
 	private fun initObservers() {
-		newNoteViewModel.note.observe(viewLifecycleOwner) {
-			with(binding) {
-				etNoteTitle.setText(it.title)
-				etNoteBody.setText(it.noteText)
-			}
-		}
 		newNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
 			when (it) {
 				NewNoteViewModel.Events.AddPressed -> {

@@ -3,12 +3,13 @@ package com.example.notesproject.data.db
 import androidx.room.*
 import com.example.notesproject.data.model.Note
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM notesTable")
-    fun getAllNotes(): Single<List<Note>>
+    fun getAllNotes(): Observable<Note>
 
     @Query("SELECT * FROM notesTable WHERE id = :id")
     fun getNoteById(id: Int): Single<Note>

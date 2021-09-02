@@ -2,13 +2,14 @@ package com.example.notesproject.data.repository.handlers
 
 import com.example.notesproject.data.db.NoteDao
 import com.example.notesproject.data.model.Note
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 
 class DBHandler @Inject constructor(private val dao: NoteDao) {
 
-    fun getAllNotes(): Single<List<Note>> = dao.getAllNotes()
+    fun getAllNotes(): Observable<Note> = dao.getAllNotes()
 
     fun getNoteById(id: Int) = dao.getNoteById(id)
 

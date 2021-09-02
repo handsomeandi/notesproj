@@ -35,12 +35,10 @@ class ConcreteNoteViewModel @Inject constructor(
 
 	fun onDelete() {
 		note.value?.let { note ->
-			deleteNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-				_currentEvent.value = Events.Deleted
-			},
-				{
-					logErrorMessage(it.message)
-				})
+			deleteNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+				{ _currentEvent.value = Events.Deleted },
+				{ logErrorMessage(it.message) }
+			)
 		}
 	}
 
@@ -51,11 +49,9 @@ class ConcreteNoteViewModel @Inject constructor(
 	}
 
 	private fun loadNote(id: Int) {
-		getNoteByIdUseCase.execute(id).subscribeIoObserveMain({
-			note.value = it
-		}, {
-			logErrorMessage(it.message)
-		}
+		getNoteByIdUseCase.execute(id).subscribeIoObserveMain(
+			{ note.value = it },
+			{ logErrorMessage(it.message) }
 		)
 	}
 

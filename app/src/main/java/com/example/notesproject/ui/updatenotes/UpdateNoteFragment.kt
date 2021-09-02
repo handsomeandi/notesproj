@@ -32,6 +32,7 @@ class UpdateNoteFragment : BaseFragment<UpdateNoteFragmentBinding>() {
     private fun initViews() {
         with(binding) {
             viewModel = updateNoteViewModel
+            lifecycleOwner = viewLifecycleOwner
         }
     }
 

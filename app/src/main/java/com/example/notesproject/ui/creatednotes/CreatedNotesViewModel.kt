@@ -7,7 +7,6 @@ import com.example.notesproject.data.model.Note
 import com.example.notesproject.domain.GetAllNotesUseCase
 import com.example.notesproject.logErrorMessage
 import com.example.notesproject.subscribeIoObserveMain
-import io.reactivex.rxjava3.functions.Consumer
 import javax.inject.Inject
 
 
@@ -15,14 +14,15 @@ class CreatedNotesViewModel @Inject constructor(
 	private val getAllNotesUseCase: GetAllNotesUseCase
 ) : ViewModel() {
 
-	private val _notes: MutableLiveData<List<Note>> = MutableLiveData()
-	val notes: LiveData<List<Note>> = _notes
+	private val _notes: MutableLiveData<List<Note>> = MutableLiveData(mutableListOf())
+	val notes: LiveData<List<Note>>
+	get() = _notes
 
 	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(Events.Initial)
 	val currentEvent: LiveData<Events> = _currentEvent
 
 	fun onCreate() {
-		getPhotos()
+		getNotes()
 	}
 
 	fun onNotePressed(id: Int) {
@@ -33,14 +33,10 @@ class CreatedNotesViewModel @Inject constructor(
 		_currentEvent.value = Events.CreateNotePressed
 	}
 
-	private fun getPhotos() {
+	private fun getNotes() {
 		getAllNotesUseCase.execute().subscribeIoObserveMain(
-			{
-				_notes.value = it
-			},
-			{
-				logErrorMessage(it.message)
-			}
+			{ (_notes.value as MutableList<Note>) += it },
+			{ logErrorMessage(it.message) }
 		)
 	}
 

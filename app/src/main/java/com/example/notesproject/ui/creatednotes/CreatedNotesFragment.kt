@@ -34,6 +34,7 @@ class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding>() {
 
 			}
 			createdNotesViewModel = viewModel
+			lifecycleOwner = viewLifecycleOwner
 		}
 		viewModel.onCreate()
 		initObserver()

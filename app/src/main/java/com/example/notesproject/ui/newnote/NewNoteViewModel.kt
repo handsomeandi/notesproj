@@ -22,32 +22,17 @@ class NewNoteViewModel @Inject constructor(
 	)
 	val currentEvent: LiveData<Events> = _currentEvent
 
-	val note: MutableLiveData<Note> = MutableLiveData(Note(Util.getSampleData().size + 1, "", "", "", "", ""))
+	val title: MutableLiveData<String> = MutableLiveData()
 
-
-	fun onCreate(id: Int) {
-		loadNote(id)
-	}
+	val body: MutableLiveData<String> = MutableLiveData()
 
 	fun onAddPressed() {
-		note.value?.let { note ->
-			addNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-				_currentEvent.value = Events.AddPressed
-			}, {
-				logErrorMessage(it.message)
-			}
+		val note = Note(title.value ?: "", body.value ?: "", "", "", "")
+		if(note.title.isEmpty() || note.noteText.isEmpty()) return
+		addNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+				{ _currentEvent.value = Events.AddPressed },
+				{ logErrorMessage(it.message) }
 			)
-		}
-	}
-
-	private fun loadNote(id: Int) {
-		getNoteByIdUseCase.execute(id).subscribeIoObserveMain({
-			note.value = it
-		},
-		{
-			logErrorMessage(it.message)
-		}
-		)
 	}
 
 	sealed class Events {

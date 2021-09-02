@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notesproject.MainApp
@@ -34,6 +35,7 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 	private fun initView() {
 		with(binding) {
 			viewModel = concreteNoteViewModel
+			lifecycleOwner = viewLifecycleOwner
 		}
 	}
 
