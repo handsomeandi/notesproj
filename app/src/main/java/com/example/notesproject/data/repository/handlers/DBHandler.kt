@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class DBHandler @Inject constructor(private val dao: NoteDao) {
 
-    fun getAllNotes(): Observable<Note> = dao.getAllNotes()
+    fun getAllNotes(): Observable<List<Note>> = dao.getAllNotes()
 
     fun getNoteById(id: Int) = dao.getNoteById(id)
 

@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM notesTable")
-    fun getAllNotes(): Observable<Note>
+    fun getAllNotes(): Observable<List<Note>>
 
     @Query("SELECT * FROM notesTable WHERE id = :id")
     fun getNoteById(id: Int): Single<Note>

@@ -1,4 +1,4 @@
-package com.example.notesproject.domain
+	package com.example.notesproject.domain
 
 import com.example.notesproject.data.model.Note
 import com.example.notesproject.data.repository.NotesRepository
