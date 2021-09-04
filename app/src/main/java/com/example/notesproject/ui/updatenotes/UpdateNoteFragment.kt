@@ -5,8 +5,6 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notesproject.MainApp
-import com.example.notesproject.clicker
-import com.example.notesproject.data.model.Note
 import com.example.notesproject.databinding.UpdateNoteFragmentBinding
 import com.example.notesproject.ui.BaseFragment
 import javax.inject.Inject
