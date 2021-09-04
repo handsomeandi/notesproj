@@ -35,8 +35,13 @@ class NewNoteViewModel @Inject constructor(
 			)
 	}
 
+	fun onSelectImagePressed(){
+		_currentEvent.value = Events.ChooseImagePressed
+	}
+
 	sealed class Events {
 		object Initial : Events()
 		object AddPressed : Events()
+		object ChooseImagePressed : Events()
 	}
 }

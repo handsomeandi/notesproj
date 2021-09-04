@@ -112,10 +112,11 @@
 
             <ImageView
                 android:id="@+id/ivAddImageAction"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
+                android:onClick="@{() -> viewModel.onSelectImagePressed()}"
                 android:src="@android:drawable/ic_menu_gallery"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
