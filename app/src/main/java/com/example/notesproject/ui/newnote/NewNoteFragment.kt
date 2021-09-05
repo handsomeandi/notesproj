@@ -2,14 +2,18 @@ package com.example.notesproject.ui.newnote
 
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
+import android.webkit.RenderProcessGoneDetail
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.example.notesproject.MainApp
 import com.example.notesproject.databinding.NewNoteFragmentBinding
 import com.example.notesproject.logErrorMessage
 import com.example.notesproject.ui.BaseFragment
+import com.example.notesproject.ui.ImagesAdapter
 import javax.inject.Inject
 
 
@@ -18,14 +22,10 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
     @Inject
     lateinit var newNoteViewModel: NewNoteViewModel
 
-    private val imageResult = registerForActivityResult(object:ActivityResultContracts.GetContent(){
-        override fun createIntent(context: Context, input: String): Intent {
-            return super.createIntent(context, input).apply {
-                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            }
-        }
-    }) { uri ->
-		binding.ivAddImageAction.setImageURI(uri)
+    private val adapter = ImagesAdapter()
+
+    private val imageResult = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+		newNoteViewModel.onImagesReceived(uris)
 	}
 
     override fun viewBindingInflate(): NewNoteFragmentBinding =
@@ -43,6 +43,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
         with(binding) {
             viewModel = newNoteViewModel
             lifecycleOwner = viewLifecycleOwner
+            rvImages.adapter = adapter
         }
     }
 
@@ -61,7 +62,16 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
                     	logErrorMessage(e.message)
                     }
                 }
+                NewNoteViewModel.Events.ImagesReceived -> {
+//                    binding.ivAddImageAction.visibility = View.GONE
+                }
+                NewNoteViewModel.Events.ImagesLimit -> {
+                    Toast.makeText(requireContext(), "Too many images! Maximum: 10", Toast.LENGTH_SHORT).show()
+                }
             }
+        }
+        newNoteViewModel.images.observe(viewLifecycleOwner){
+            adapter.setItems(it)
         }
     }
 
