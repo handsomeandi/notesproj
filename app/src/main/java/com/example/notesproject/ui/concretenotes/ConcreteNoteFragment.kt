@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,6 +13,8 @@ import com.example.notesproject.R
 import com.example.notesproject.clicker
 import com.example.notesproject.databinding.ConcreteNoteFragmentBinding
 import com.example.notesproject.ui.BaseFragment
+import com.example.notesproject.ui.ImagesAdapter
+import com.example.notesproject.ui.OnImageClickListener
 import javax.inject.Inject
 
 
@@ -21,6 +24,8 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 
 	@Inject
 	lateinit var concreteNoteViewModel: ConcreteNoteViewModel
+
+	private lateinit var adapter: ImagesAdapter
 
 	override fun viewBindingInflate(): ConcreteNoteFragmentBinding =
 		ConcreteNoteFragmentBinding.inflate(layoutInflater)
@@ -36,6 +41,12 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 		with(binding) {
 			viewModel = concreteNoteViewModel
 			lifecycleOwner = viewLifecycleOwner
+			adapter = ImagesAdapter(object : OnImageClickListener{
+				override fun onImageClick(id: String) {
+					Toast.makeText(requireContext(), id, Toast.LENGTH_SHORT).show()
+				}
+			}, false)
+			rvImages.adapter = adapter
 		}
 	}
 
@@ -71,6 +82,9 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 					findNavController().popBackStack()
 				}
 			}
+		}
+		concreteNoteViewModel.note.observe(viewLifecycleOwner){
+			adapter.setItems(it.images)
 		}
 	}
 }

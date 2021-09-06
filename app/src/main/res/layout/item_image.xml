@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="image"
+            type="com.example.notesproject.data.model.ImageObject" />
+
+        <variable
+            name="imageClickListener"
+            type="com.example.notesproject.ui.OnImageClickListener" />
+    </data>
+
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:onClick="@{() -> imageClickListener.onImageClick(image.id)}"
             />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:onClick="@{() -> imageClickListener.onDeleteClick(image.id)}"
+            android:src="@drawable/ic_close_round_white"
+            android:layout_gravity="end"/>
+
+    </FrameLayout>
 </layout>
