@@ -1,6 +1,7 @@
 package com.example.notesproject.ui
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,9 @@ import com.example.notesproject.R
 import com.example.notesproject.Util.IMAGE_DIRECTORY
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.databinding.ItemImageBinding
+import com.example.notesproject.logErrorMessage
+import com.example.notesproject.subscribeIoObserveMain
+import io.reactivex.rxjava3.core.Single
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -40,42 +44,19 @@ class ImagesAdapter constructor(private val imageClickListener: OnImageClickList
 	inner class ImagesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		private val binding = DataBindingUtil.bind<ItemImageBinding>(itemView)
 		fun setData(imageObject: ImageObject) {
-
-//			BitmapFactory.decodeStream(FileInputStream(File(itemView.context.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE), imageObject.id))).also {
-//				binding?.ivImage?.setImageBitmap(it)
-//			}
-////TODO: retrieve images from local storage
 			try {
 				binding?.ivImage?.setImageURI(imageObject.uri.toUri())
 			} catch (e: Exception) {
 				try {
-					val b = BitmapFactory.decodeStream(
-						FileInputStream(
-							File(
-								itemView.context.getDir(
-									IMAGE_DIRECTORY,
-									Context.MODE_PRIVATE
-								), "${imageObject.id}.png"
-							)
-						)
+					getImage(itemView.context, imageObject.id).subscribeIoObserveMain(
+						{
+							val sheesh = it
+							binding?.ivImage?.setImageBitmap(it) },
+						{ logErrorMessage(it.message) }
 					)
-//					val f = File(IMAGE_DIRECTORY, "${imageObject.id}.jpg")
-//					val b = BitmapFactory.decodeStream(FileInputStream(f))
-					binding?.ivImage?.setImageBitmap(b)
 				} catch (e: FileNotFoundException) {
 					e.printStackTrace()
 				}
-//				binding?.ivImage?.let {
-//					Glide.with(itemView.context)
-//						.load(
-//							File(
-//								itemView.context.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE),
-//								"${imageObject.id}.jpg"
-//							)
-//
-//						)
-//						.into(it);
-//				}
 			}
 			binding?.ivDelete?.isVisible = isEditable
 			bindImage(imageObject)
@@ -100,6 +81,27 @@ class ImagesAdapter constructor(private val imageClickListener: OnImageClickList
 	fun setItems(images: List<ImageObject>) {
 		containerList = (ArrayList(images))
 		notifyDataSetChanged()
+	}
+
+	fun getImage(context: Context, imageName: String): Single<Bitmap> {
+		return Single.create { emitter ->
+			try {
+				BitmapFactory.decodeStream(
+					FileInputStream(
+						File(
+							context.getDir(
+								IMAGE_DIRECTORY,
+								Context.MODE_PRIVATE
+							), "${imageName}.png"
+						)
+					)
+				).also {
+					emitter.onSuccess(it)
+				}
+			} catch (e: Exception) {
+				logErrorMessage(e.message)
+			}
+		}
 	}
 
 }

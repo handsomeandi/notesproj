@@ -5,8 +5,8 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesproject.MainApp
-import com.example.notesproject.clicker
 import com.example.notesproject.databinding.CreatedNotesFragmentBinding
+import com.example.notesproject.logErrorMessage
 import com.example.notesproject.ui.BaseFragment
 import javax.inject.Inject
 
@@ -54,9 +54,15 @@ class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding>() {
 						it.id
 					)
 				)
-				CreatedNotesViewModel.Events.CreateNotePressed -> findNavController().navigate(
-					CreatedNotesFragmentDirections.actionCreatedNotesFragmentToNewNoteFragment()
-				)
+				CreatedNotesViewModel.Events.CreateNotePressed -> {
+					try {
+						findNavController().navigate(
+							CreatedNotesFragmentDirections.actionCreatedNotesFragmentToNewNoteFragment()
+						)
+					} catch (e: Exception) {
+						logErrorMessage(e.message)
+					}
+				}
 			}
 
 		}

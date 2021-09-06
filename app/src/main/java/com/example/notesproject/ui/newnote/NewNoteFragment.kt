@@ -14,10 +14,12 @@ import com.example.notesproject.Util.IMAGE_DIRECTORY
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.databinding.NewNoteFragmentBinding
 import com.example.notesproject.logErrorMessage
+import com.example.notesproject.subscribeIoObserveMain
 import com.example.notesproject.toImageObjects
 import com.example.notesproject.ui.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
 import com.example.notesproject.ui.OnImageClickListener
+import io.reactivex.rxjava3.core.Completable
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -31,6 +33,8 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 
 	private lateinit var adapter: ImagesAdapter
 
+	private lateinit var  directory: File
+
 	private val imageResult = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
 		newNoteViewModel.onImagesReceived(uris.toImageObjects())
 	}
@@ -42,6 +46,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		MainApp.instance.appComponent?.inject(this)
+
 		initViews()
 		initObservers()
 	}
@@ -50,6 +55,8 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 		with(binding) {
 			viewModel = newNoteViewModel
 			lifecycleOwner = viewLifecycleOwner
+			directory = requireActivity().applicationContext.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+
 			adapter = ImagesAdapter(object : OnImageClickListener {
 				override fun onImageClick(id: String) {
 					Toast.makeText(requireContext(), id, Toast.LENGTH_SHORT).show()
@@ -68,10 +75,12 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 		newNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
 			when (it) {
 				is NewNoteViewModel.Events.AddPressed -> {
-					it.images?.forEach { image ->
-						saveImage(image)
-					}
-					findNavController().popBackStack()
+					saveImages(it.images).subscribeIoObserveMain({
+						findNavController().popBackStack()
+					}, { e ->
+						Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
+					})
+//					findNavController().popBackStack()
 				}
 				NewNoteViewModel.Events.Initial -> {
 				}
@@ -96,22 +105,29 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 		}
 	}
 
-	private fun saveImage(image: ImageObject) {
-		val directory: File = requireActivity().applicationContext.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
-		val mypath = File(directory, "${image.id}.png")
-
-		var fos: FileOutputStream? = null
-		try {
-			fos = FileOutputStream(mypath)
-			BitmapFactory.decodeStream(requireActivity().contentResolver.openInputStream(image.uri.toUri()), null, null)
-				?.compress(Bitmap.CompressFormat.PNG, 100, fos)
-		} catch (e: Exception) {
-			e.printStackTrace()
-		} finally {
+	private fun saveImages(images: List<ImageObject>?): Completable {
+		return Completable.create {
 			try {
-				fos?.close()
-			} catch (e: IOException) {
-				e.printStackTrace()
+				images?.forEach { image ->
+					val path = File(directory, "${image.id}.png")
+
+					var fos: FileOutputStream? = null
+					fos = FileOutputStream(path)
+					BitmapFactory.decodeStream(
+						requireActivity().contentResolver.openInputStream(image.uri.toUri()),
+						null,
+						null
+					)
+						?.compress(Bitmap.CompressFormat.PNG, 100, fos)
+					try {
+						fos?.close()
+					} catch (e: IOException) {
+						e.printStackTrace()
+					}
+				}
+				it.onComplete()
+			} catch (e: Exception) {
+				it.onError(e)
 			}
 		}
 	}
