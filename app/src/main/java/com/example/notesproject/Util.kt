@@ -1,6 +1,7 @@
 package com.example.notesproject
 
 import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -17,10 +18,13 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Action
 import io.reactivex.rxjava3.functions.Consumer
 import io.reactivex.rxjava3.schedulers.Schedulers.io
+import java.io.File
 
 object Util {
 
-	const val IMAGE_DIRECTORY = "noteImgDir"
+	private const val imageFolder = "noteImgDir"
+
+	val IMAGE_DIRECTORY: File = MainApp.instance.applicationContext.getDir(imageFolder, Context.MODE_PRIVATE)
 
 	@Suppress("DEPRECATION")
 	fun Activity.setStatusBarColor(@ColorRes statusBarColor: Int, lightTextColor: Boolean) {

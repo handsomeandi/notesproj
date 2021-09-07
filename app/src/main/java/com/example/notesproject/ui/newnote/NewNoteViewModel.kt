@@ -69,9 +69,14 @@ class NewNoteViewModel @Inject constructor(
 		}
 	}
 
+	fun onBackPressed(){
+		_currentEvent.value = Events.BackPressed(images.value)
+	}
+
 	sealed class Events {
 		object Initial : Events()
 		class AddPressed(val images: List<ImageObject>?) : Events()
+		class BackPressed(val images: List<ImageObject>?) : Events()
 		object ChooseImagePressed : Events()
 		object ImagesReceived : Events()
 		object ImagesLimit : Events()

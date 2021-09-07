@@ -1,11 +1,12 @@
 package com.example.notesproject.ui.newnote
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
@@ -19,7 +20,12 @@ import com.example.notesproject.toImageObjects
 import com.example.notesproject.ui.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
 import com.example.notesproject.ui.OnImageClickListener
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.schedulers.Schedulers.io
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -33,7 +39,6 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 
 	private lateinit var adapter: ImagesAdapter
 
-	private lateinit var  directory: File
 
 	private val imageResult = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
 		newNoteViewModel.onImagesReceived(uris.toImageObjects())
@@ -55,7 +60,6 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 		with(binding) {
 			viewModel = newNoteViewModel
 			lifecycleOwner = viewLifecycleOwner
-			directory = requireActivity().applicationContext.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
 
 			adapter = ImagesAdapter(object : OnImageClickListener {
 				override fun onImageClick(id: String) {
@@ -63,11 +67,13 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 				}
 
 				override fun onDeleteClick(id: String) {
-//					Toast.makeText(requireContext(), "Delete clicked $id", Toast.LENGTH_SHORT).show()
 					newNoteViewModel.onRemoveImagePressed(id)
 				}
 			}, true)
 			rvImages.adapter = adapter
+			requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+				newNoteViewModel.onBackPressed()
+			};
 		}
 	}
 
@@ -75,12 +81,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 		newNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
 			when (it) {
 				is NewNoteViewModel.Events.AddPressed -> {
-					saveImages(it.images).subscribeIoObserveMain({
-						findNavController().popBackStack()
-					}, { e ->
-						Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
-					})
-//					findNavController().popBackStack()
+					findNavController().popBackStack()
 				}
 				NewNoteViewModel.Events.Initial -> {
 				}
@@ -97,39 +98,81 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 				NewNoteViewModel.Events.ImagesLimit -> {
 					Toast.makeText(requireContext(), "Too many images! Maximum: 10", Toast.LENGTH_SHORT).show()
 				}
+				is NewNoteViewModel.Events.BackPressed -> {
+					deleteImages(it.images).subscribeIoObserveMain(
+						{ findNavController().popBackStack() },
+						{
+							logErrorMessage(it.message)
+							findNavController().popBackStack()
+						}
+					)
 
+
+				}
 			}
 		}
-		newNoteViewModel.images.observe(viewLifecycleOwner) {
-			adapter.setItems(it)
+		newNoteViewModel.images.observe(viewLifecycleOwner) { images ->
+			if (images.isNotEmpty())
+				saveImages(images).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnNext {
+					adapter.addItem(it)
+				}.subscribe(
+					{ Log.d("testing", "success saving") },
+					{ logErrorMessage(it.message) }
+				)
 		}
 	}
 
-	private fun saveImages(images: List<ImageObject>?): Completable {
+	private fun saveImages(images: List<ImageObject>?): Observable<ImageObject> {
+		return Observable.create { mainEmitter ->
+			try {
+				images?.forEach { image ->
+					Single.create<ImageObject> {
+						val path = File(IMAGE_DIRECTORY, "${image.id}.png")
+
+						val fos = FileOutputStream(path)
+						BitmapFactory.decodeStream(
+							requireActivity().contentResolver.openInputStream(image.uri.toUri()),
+							null,
+							null
+						)?.compress(Bitmap.CompressFormat.PNG, 100, fos)
+						try {
+							fos.close()
+						} catch (e: IOException) {
+							e.printStackTrace()
+							it.onError(e)
+						}
+						it.onSuccess(image)
+					}.subscribeOn(io()).subscribe(
+						{ mainEmitter.onNext(it) },
+						{ logErrorMessage(it.message) }
+					)
+				} ?: throw Exception("empty list")
+			} catch (e: Exception) {
+				mainEmitter.onError(e)
+			}
+		}
+	}
+
+
+	private fun deleteImages(images: List<ImageObject>?): Completable {
 		return Completable.create {
 			try {
 				images?.forEach { image ->
-					val path = File(directory, "${image.id}.png")
-
-					var fos: FileOutputStream? = null
-					fos = FileOutputStream(path)
-					BitmapFactory.decodeStream(
-						requireActivity().contentResolver.openInputStream(image.uri.toUri()),
-						null,
-						null
-					)
-						?.compress(Bitmap.CompressFormat.PNG, 100, fos)
-					try {
-						fos?.close()
-					} catch (e: IOException) {
-						e.printStackTrace()
+					val fileToDelete = File(IMAGE_DIRECTORY, "${image.id}.png")
+					if (fileToDelete.exists()) {
+						if (fileToDelete.delete()) {
+							Log.d("testing", "file Deleted :")
+						} else {
+							Log.d("testing", "file not Deleted :")
+						}
 					}
 				}
 				it.onComplete()
+
 			} catch (e: Exception) {
 				it.onError(e)
 			}
 		}
-	}
 
+	}
 }
