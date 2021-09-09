@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.example.notesproject.data.model.ImageObject
@@ -78,4 +81,20 @@ fun List<Uri>.toImageObjects(): List<ImageObject> {
 		images.add(ImageObject("${Math.random() + Math.random()}", it.toString()))
 	}
 	return images
+}
+
+infix fun EditText.onTextChanged(onTextChanged: (String) -> Unit){
+	this.addTextChangedListener(object : TextWatcher{
+		override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+			return
+		}
+
+		override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+			return
+		}
+
+		override fun afterTextChanged(s: Editable?) {
+			onTextChanged(s.toString())
+		}
+	})
 }

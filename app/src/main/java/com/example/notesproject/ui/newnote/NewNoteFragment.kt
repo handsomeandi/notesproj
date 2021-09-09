@@ -15,6 +15,7 @@ import com.example.notesproject.Util.IMAGE_DIRECTORY
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.databinding.NewNoteFragmentBinding
 import com.example.notesproject.logErrorMessage
+import com.example.notesproject.onTextChanged
 import com.example.notesproject.subscribeIoObserveMain
 import com.example.notesproject.toImageObjects
 import com.example.notesproject.ui.BaseFragment
@@ -24,7 +25,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.schedulers.Schedulers.io
 import java.io.File
 import java.io.FileOutputStream
@@ -39,18 +39,24 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 
 	private lateinit var adapter: ImagesAdapter
 
-
 	private val imageResult = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
 		newNoteViewModel.onImagesReceived(uris.toImageObjects())
 	}
 
+//	init {
+//		MainApp.instance.appComponent?.inject(this)
+//	}
+
 	override fun viewBindingInflate(): NewNoteFragmentBinding =
 		NewNoteFragmentBinding.inflate(layoutInflater)
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		MainApp.instance.appComponent?.inject(this)
+		super.onCreate(savedInstanceState)
+	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		MainApp.instance.appComponent?.inject(this)
 
 		initViews()
 		initObservers()
@@ -73,7 +79,9 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 			rvImages.adapter = adapter
 			requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
 				newNoteViewModel.onBackPressed()
-			};
+			}
+			etNoteTitle onTextChanged newNoteViewModel::onNoteTitleChanged
+			etNoteBody onTextChanged newNoteViewModel::onNoteBodyChanged
 		}
 	}
 
@@ -98,6 +106,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 				NewNoteViewModel.Events.ImagesLimit -> {
 					Toast.makeText(requireContext(), "Too many images! Maximum: 10", Toast.LENGTH_SHORT).show()
 				}
+
 				is NewNoteViewModel.Events.BackPressed -> {
 					deleteImages(it.images).subscribeIoObserveMain(
 						{ findNavController().popBackStack() },
@@ -106,19 +115,30 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 							findNavController().popBackStack()
 						}
 					)
-
-
 				}
 			}
 		}
 		newNoteViewModel.images.observe(viewLifecycleOwner) { images ->
-			if (images.isNotEmpty())
-				saveImages(images).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnNext {
-					adapter.addItem(it)
-				}.subscribe(
-					{ Log.d("testing", "success saving") },
-					{ logErrorMessage(it.message) }
-				)
+			if (images.isNotEmpty()) {
+				saveImages(images.filter { !File(IMAGE_DIRECTORY, "${it.id}.png").exists() }).subscribeOn(io())
+					.observeOn(AndroidSchedulers.mainThread())
+					.doOnNext {
+						adapter.addItem(it)
+					}
+//					.doOnComplete {
+//						adapter.updateItems(images)
+//					}
+					.subscribe(
+						{ Log.d("testing", "success saving") },
+						{ logErrorMessage(it.message) }
+					)
+			}
+		}
+		newNoteViewModel.title.observe(viewLifecycleOwner) {
+			if (binding.etNoteTitle.text.toString() != it) binding.etNoteTitle.setText(it)
+		}
+		newNoteViewModel.body.observe(viewLifecycleOwner) {
+			if (binding.etNoteBody.text.toString() != it) binding.etNoteBody.setText(it)
 		}
 	}
 
@@ -130,7 +150,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 						val path = File(IMAGE_DIRECTORY, "${image.id}.png")
 
 						val fos = FileOutputStream(path)
-						BitmapFactory.decodeStream(
+						val isDecoded = BitmapFactory.decodeStream(
 							requireActivity().contentResolver.openInputStream(image.uri.toUri()),
 							null,
 							null
@@ -141,9 +161,13 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 							e.printStackTrace()
 							it.onError(e)
 						}
-						it.onSuccess(image)
+						isDecoded?.let { isSuccessDecoded ->
+							if (isSuccessDecoded) it.onSuccess(image)
+						}
 					}.subscribeOn(io()).subscribe(
-						{ mainEmitter.onNext(it) },
+						{
+							mainEmitter.onNext(it)
+						},
 						{ logErrorMessage(it.message) }
 					)
 				} ?: throw Exception("empty list")
@@ -173,6 +197,5 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding>() {
 				it.onError(e)
 			}
 		}
-
 	}
 }

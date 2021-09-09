@@ -17,20 +17,20 @@ import java.io.File
 class ImagesAdapter constructor(private val imageClickListener: OnImageClickListener, private val isEditable: Boolean) :
 	RecyclerView.Adapter<ImagesAdapter.ImagesHolder>() {
 
-	private var containerList: ArrayList<ImageObject>? = arrayListOf()
+	private val containerList: ArrayList<ImageObject> by lazy { arrayListOf() }
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesHolder {
 		return ImagesHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false))
 	}
 
 	override fun onBindViewHolder(holder: ImagesHolder, position: Int) {
-		containerList?.let {
+		containerList.let {
 			holder.setData(it[position])
 		}
 	}
 
 	override fun getItemCount(): Int {
-		return containerList?.size ?: 0
+		return containerList.size
 	}
 
 	inner class ImagesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -55,16 +55,19 @@ class ImagesAdapter constructor(private val imageClickListener: OnImageClickList
 
 
 	fun addItem(image: ImageObject) {
-		containerList?.let {
-			val index = it.size
-			it.add(image)
+		with(containerList) {
+			val index = size
+			add(image)
 			notifyItemInserted(index)
-			notifyItemRangeChanged(index, it.size)
+			notifyItemRangeChanged(index, size)
 		}
 	}
 
 	fun setItems(images: List<ImageObject>) {
-		containerList = (ArrayList(images))
+		containerList.apply {
+			clear()
+			addAll(images)
+		}
 		notifyDataSetChanged()
 	}
 }

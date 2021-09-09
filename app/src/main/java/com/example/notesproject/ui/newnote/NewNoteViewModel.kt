@@ -1,13 +1,8 @@
 package com.example.notesproject.ui.newnote
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.notesproject.Util.IMAGE_DIRECTORY
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.data.model.Note
 import com.example.notesproject.domain.AddNoteUseCase
@@ -15,9 +10,6 @@ import com.example.notesproject.domain.GetNoteByIdUseCase
 import com.example.notesproject.logErrorMessage
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers.io
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -55,7 +47,9 @@ class NewNoteViewModel @Inject constructor(
 	fun onImagesReceived(imagesUris: List<ImageObject>) {
 		if (imagesUris.size + (images.value?.size ?: 0) <= 10) {
 			images.value = images.value?.apply {
-				addAll(imagesUris)
+				addAll(imagesUris.filter { img ->
+					img !in (this.asSequence().filter { it.uri != img.uri })
+				})
 			}
 			_currentEvent.value = Events.ImagesReceived
 		} else {
@@ -69,8 +63,19 @@ class NewNoteViewModel @Inject constructor(
 		}
 	}
 
-	fun onBackPressed(){
+	fun onBackPressed() {
 		_currentEvent.value = Events.BackPressed(images.value)
+	}
+
+	fun onNoteTitleChanged(noteTitle: String) {
+		if (noteTitle != title.value) title.value = noteTitle
+	}
+
+	fun onNoteBodyChanged(noteBody: String) {
+		if (noteBody != body.value) body.value = noteBody
+	}
+
+	fun onImagesSaved() {
 	}
 
 	sealed class Events {
