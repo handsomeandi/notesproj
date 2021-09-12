@@ -13,77 +13,80 @@ import io.reactivex.rxjava3.schedulers.Schedulers.io
 import javax.inject.Inject
 
 
-class NewNoteViewModel @Inject constructor(
-	private val getNoteByIdUseCase: GetNoteByIdUseCase,
-	private val addNoteUseCase: AddNoteUseCase
-) : ViewModel() {
-	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
-		Events.Initial
-	)
-	val currentEvent: LiveData<Events> = _currentEvent
+class NewNoteViewModel : ViewModel() {
+    private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
+        Events.Initial
+    )
+    val currentEvent: LiveData<Events> = _currentEvent
 
-	val title: MutableLiveData<String> = MutableLiveData()
+    val title: MutableLiveData<String> = MutableLiveData()
 
-	val body: MutableLiveData<String> = MutableLiveData()
+    val body: MutableLiveData<String> = MutableLiveData()
 
-	val images: MutableLiveData<MutableList<ImageObject>> = MutableLiveData(mutableListOf())
+    val images: MutableLiveData<MutableList<ImageObject>> = MutableLiveData(mutableListOf())
 
+    @Inject
+    lateinit var getNoteByIdUseCase: GetNoteByIdUseCase
 
-	fun onAddPressed() {
-		val note = Note(title.value ?: "", body.value ?: "", "", "", images.value ?: listOf())
-		if (note.title.isEmpty() || note.noteText.isEmpty()) return
-		addNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread())
-			.subscribe(
-				{ _currentEvent.value = Events.AddPressed(images.value) },
-				{ logErrorMessage(it.message) }
-			)
-	}
+    @Inject
+    lateinit var addNoteUseCase: AddNoteUseCase
 
 
-	fun onSelectImagePressed() {
-		_currentEvent.value = Events.ChooseImagePressed
-	}
+    fun onAddPressed() {
+        val note = Note(title.value ?: "", body.value ?: "", "", "", images.value ?: listOf())
+        if (note.title.isEmpty() || note.noteText.isEmpty()) return
+        addNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { _currentEvent.value = Events.AddPressed(images.value) },
+                { logErrorMessage(it.message) }
+            )
+    }
 
-	fun onImagesReceived(imagesUris: List<ImageObject>) {
-		if (imagesUris.size + (images.value?.size ?: 0) <= 10) {
-			images.value = images.value?.apply {
-				addAll(imagesUris.filter { img ->
-					img !in (this.asSequence().filter { it.uri != img.uri })
-				})
-			}
-			_currentEvent.value = Events.ImagesReceived
-		} else {
-			_currentEvent.value = Events.ImagesLimit
-		}
-	}
 
-	fun onRemoveImagePressed(id: String) {
-		images.value = images.value?.apply {
-			remove(this.find { it.id == id })
-		}
-	}
+    fun onSelectImagePressed() {
+        _currentEvent.value = Events.ChooseImagePressed
+    }
 
-	fun onBackPressed() {
-		_currentEvent.value = Events.BackPressed(images.value)
-	}
+    fun onImagesReceived(imagesUris: List<ImageObject>) {
+        if (imagesUris.size + (images.value?.size ?: 0) <= 10) {
+            images.value = images.value?.apply {
+                addAll(imagesUris.filter { img ->
+                    img !in (this.asSequence().filter { it.uri != img.uri })
+                })
+            }
+            _currentEvent.value = Events.ImagesReceived
+        } else {
+            _currentEvent.value = Events.ImagesLimit
+        }
+    }
 
-	fun onNoteTitleChanged(noteTitle: String) {
-		if (noteTitle != title.value) title.value = noteTitle
-	}
+    fun onRemoveImagePressed(id: String) {
+        images.value = images.value?.apply {
+            remove(this.find { it.id == id })
+        }
+    }
 
-	fun onNoteBodyChanged(noteBody: String) {
-		if (noteBody != body.value) body.value = noteBody
-	}
+    fun onBackPressed() {
+        _currentEvent.value = Events.BackPressed(images.value)
+    }
 
-	fun onImagesSaved() {
-	}
+    fun onNoteTitleChanged(noteTitle: String) {
+        if (noteTitle != title.value) title.value = noteTitle
+    }
 
-	sealed class Events {
-		object Initial : Events()
-		class AddPressed(val images: List<ImageObject>?) : Events()
-		class BackPressed(val images: List<ImageObject>?) : Events()
-		object ChooseImagePressed : Events()
-		object ImagesReceived : Events()
-		object ImagesLimit : Events()
-	}
+    fun onNoteBodyChanged(noteBody: String) {
+        if (noteBody != body.value) body.value = noteBody
+    }
+
+    fun onImagesSaved() {
+    }
+
+    sealed class Events {
+        object Initial : Events()
+        class AddPressed(val images: List<ImageObject>?) : Events()
+        class BackPressed(val images: List<ImageObject>?) : Events()
+        object ChooseImagePressed : Events()
+        object ImagesReceived : Events()
+        object ImagesLimit : Events()
+    }
 }
