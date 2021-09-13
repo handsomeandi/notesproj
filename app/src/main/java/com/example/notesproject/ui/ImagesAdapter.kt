@@ -74,5 +74,5 @@ class ImagesAdapter constructor(private val imageClickListener: OnImageClickList
 
 interface OnImageClickListener {
 	fun onImageClick(id: String)
-	fun onDeleteClick(id: String) {}
+	fun onDeleteClick(image: ImageObject) {}
 }

@@ -9,10 +9,10 @@ import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = arrayOf(DbModule::class))
+@Component(modules = arrayOf(DbModule::class, RepoModule::class))
 interface AppComponent {
-    fun inject(fragment: CreatedNotesFragment)
-    fun inject(fragment: ConcreteNoteFragment)
-    fun inject(fragment: UpdateNoteFragment)
-    fun inject(fragment: NewNoteFragment)
+	fun inject(fragment: CreatedNotesFragment)
+	fun inject(fragment: ConcreteNoteFragment)
+	fun inject(fragment: UpdateNoteFragment)
+	fun inject(fragment: NewNoteFragment)
 }

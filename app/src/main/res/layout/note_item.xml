@@ -9,7 +9,7 @@
 
         <variable
             name="noteCard"
-            type="com.example.notesproject.data.model.Note" />
+            type="com.example.notesproject.domain.model.NoteModel" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

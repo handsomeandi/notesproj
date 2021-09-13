@@ -1,7 +1,6 @@
-package com.example.notesproject.domain
+package com.example.notesproject.domain.usecases
 
-import com.example.notesproject.data.model.Note
-import com.example.notesproject.data.repository.NotesRepository
+import com.example.notesproject.domain.repository.NotesRepository
 import javax.inject.Inject
 
 class GetAllNotesUseCase @Inject constructor(private val repository: NotesRepository) {

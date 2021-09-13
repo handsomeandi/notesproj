@@ -13,14 +13,6 @@ import android.widget.EditText
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.example.notesproject.data.model.ImageObject
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.functions.Action
-import io.reactivex.rxjava3.functions.Consumer
-import io.reactivex.rxjava3.schedulers.Schedulers.io
 import java.io.File
 
 object Util {
@@ -47,29 +39,6 @@ infix fun View.clicker(onClickListener: View.OnClickListener) {
 	setOnClickListener(onClickListener)
 }
 
-fun <T> Single<T>.subscribeIoObserveMain(
-	successCallback: Consumer<T>,
-	errorCallback: Consumer<Throwable>
-): Disposable =
-	subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-		successCallback, errorCallback
-	)
-
-fun <T> Observable<T>.subscribeIoObserveMain(
-	successCallback: Consumer<T>,
-	errorCallback: Consumer<Throwable>
-): Disposable =
-	subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-		successCallback, errorCallback
-	)
-
-fun Completable.subscribeIoObserveMain(
-	successCallback: Action,
-	errorCallback: Consumer<Throwable>
-): Disposable =
-	subscribeOn(io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-		successCallback, errorCallback
-	)
 
 fun logErrorMessage(message: String?) {
 	Log.d("testing", message ?: "unknown error")
@@ -83,8 +52,8 @@ fun List<Uri>.toImageObjects(): List<ImageObject> {
 	return images
 }
 
-infix fun EditText.onTextChanged(onTextChanged: (String) -> Unit){
-	this.addTextChangedListener(object : TextWatcher{
+infix fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
+	this.addTextChangedListener(object : TextWatcher {
 		override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 			return
 		}

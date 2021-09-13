@@ -25,7 +25,7 @@
             android:id="@+id/ivDelete"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:onClick="@{() -> imageClickListener.onDeleteClick(image.id)}"
+            android:onClick="@{() -> imageClickListener.onDeleteClick(image)}"
             android:src="@drawable/ic_close_round_white"
             android:layout_gravity="end"/>
 

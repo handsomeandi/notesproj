@@ -2,21 +2,19 @@ package com.example.notesproject.ui.creatednotes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.notesproject.data.model.Note
-import com.example.notesproject.domain.GetAllNotesUseCase
+import com.example.notesproject.domain.model.NoteModel
+import com.example.notesproject.domain.usecases.GetAllNotesUseCase
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.subscribeIoObserveMain
-import io.reactivex.rxjava3.functions.Consumer
+import com.example.notesproject.ui.BaseViewModel
 import javax.inject.Inject
 
 
 class CreatedNotesViewModel @Inject constructor(
 	private val getAllNotesUseCase: GetAllNotesUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
-	private val _notes: MutableLiveData<List<Note>> = MutableLiveData(mutableListOf())
-	val notes: LiveData<List<Note>>
+	private val _notes: MutableLiveData<List<NoteModel>> = MutableLiveData(mutableListOf())
+	val notes: LiveData<List<NoteModel>>
 		get() = _notes
 
 	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(Events.Initial)

@@ -2,6 +2,8 @@ package com.example.notesproject.ui.creatednotes
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesproject.MainApp
@@ -11,10 +13,16 @@ import com.example.notesproject.ui.BaseFragment
 import javax.inject.Inject
 
 
-class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding>() {
+class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding, CreatedNotesViewModel>() {
 
 	@Inject
-	lateinit var viewModel: CreatedNotesViewModel
+	lateinit var createdNotesViewModelFactory: CreatedNoteViewModelFactory
+
+	override val viewModel: CreatedNotesViewModel by viewModels {
+		viewModelFactory()
+	}
+
+	override fun viewModelFactory(): ViewModelProvider.Factory = createdNotesViewModelFactory
 
 	private lateinit var adapter: NotesRecyclerViewAdapter
 

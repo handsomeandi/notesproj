@@ -1,16 +1,14 @@
 package com.example.notesproject.ui.concretenotes
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notesproject.MainApp
-import com.example.notesproject.R
-import com.example.notesproject.clicker
 import com.example.notesproject.databinding.ConcreteNoteFragmentBinding
 import com.example.notesproject.ui.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
@@ -18,12 +16,19 @@ import com.example.notesproject.ui.OnImageClickListener
 import javax.inject.Inject
 
 
-class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
+class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding, ConcreteNoteViewModel>() {
 
 	private val args: ConcreteNoteFragmentArgs by navArgs()
 
 	@Inject
-	lateinit var concreteNoteViewModel: ConcreteNoteViewModel
+	lateinit var concreteNoteViewModelFactory: ConcreteNoteViewModelFactory
+
+
+	override val viewModel: ConcreteNoteViewModel by viewModels {
+		viewModelFactory()
+	}
+
+	override fun viewModelFactory(): ViewModelProvider.Factory = concreteNoteViewModelFactory
 
 	private lateinit var adapter: ImagesAdapter
 
@@ -32,16 +37,16 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		MainApp.instance.appComponent?.inject(this)
-		concreteNoteViewModel.onCreate(args.id)
+		viewModel.onCreate(args.id)
 		initView()
 		initObserver()
 	}
 
 	private fun initView() {
 		with(binding) {
-			viewModel = concreteNoteViewModel
+			viewModel = this@ConcreteNoteFragment.viewModel
 			lifecycleOwner = viewLifecycleOwner
-			adapter = ImagesAdapter(object : OnImageClickListener{
+			adapter = ImagesAdapter(object : OnImageClickListener {
 				override fun onImageClick(id: String) {
 					Toast.makeText(requireContext(), id, Toast.LENGTH_SHORT).show()
 				}
@@ -51,14 +56,14 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 	}
 
 	private fun initObserver() {
-		concreteNoteViewModel.currentEvent.observe(viewLifecycleOwner) {
+		viewModel.currentEvent.observe(viewLifecycleOwner) {
 			when (it) {
 				is ConcreteNoteViewModel.Events.DeletePressed -> {
 					val alertDialog: AlertDialog? = activity?.let {
 						val builder = AlertDialog.Builder(it)
 						builder.apply {
 							setPositiveButton("Удалить") { dialog, id ->
-								concreteNoteViewModel.onDelete()
+								viewModel.onDelete()
 							}
 							setNegativeButton("Отмена") { dialog, id ->
 								dialog.dismiss()
@@ -83,7 +88,7 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding>() {
 				}
 			}
 		}
-		concreteNoteViewModel.note.observe(viewLifecycleOwner){
+		viewModel.note.observe(viewLifecycleOwner) {
 			adapter.setItems(it.images)
 		}
 	}
