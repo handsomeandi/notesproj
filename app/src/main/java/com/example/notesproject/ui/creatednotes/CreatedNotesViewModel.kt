@@ -2,6 +2,7 @@ package com.example.notesproject.ui.creatednotes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.notesproject.SingleLiveEvent
 import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.GetAllNotesUseCase
 import com.example.notesproject.logErrorMessage
@@ -17,8 +18,8 @@ class CreatedNotesViewModel @Inject constructor(
 	val notes: LiveData<List<NoteModel>>
 		get() = _notes
 
-	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(Events.Initial)
-	val currentEvent: LiveData<Events> = _currentEvent
+	private val _currentEvent: SingleLiveEvent<Events> = SingleLiveEvent()
+	val currentEvent: SingleLiveEvent<Events> = _currentEvent
 
 	fun onCreate() {
 		getNotes()
@@ -41,9 +42,9 @@ class CreatedNotesViewModel @Inject constructor(
 		)
 	}
 
-	sealed interface Events {
-		object Initial : Events
-		class NotePressed(val id: Int) : Events
-		object CreateNotePressed : Events
+	sealed class Events {
+		object Initial : Events()
+		class NotePressed(val id: Int) : Events()
+		object CreateNotePressed : Events()
 	}
 }

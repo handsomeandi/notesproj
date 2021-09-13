@@ -1,7 +1,7 @@
 package com.example.notesproject.ui.updatenotes
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.notesproject.SingleLiveEvent
 import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.GetNoteByIdUseCase
 import com.example.notesproject.domain.usecases.UpdateNoteUseCase
@@ -16,10 +16,8 @@ class UpdateNoteViewModel @Inject constructor(
 	private val getNoteByIdUseCase: GetNoteByIdUseCase
 ) : BaseViewModel() {
 
-	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
-		Events.Initial
-	)
-	val currentEvent: LiveData<Events> = _currentEvent
+	private val _currentEvent: SingleLiveEvent<Events> = SingleLiveEvent()
+	val currentEvent: SingleLiveEvent<Events> = _currentEvent
 
 	val note: MutableLiveData<NoteModel> = MutableLiveData()
 

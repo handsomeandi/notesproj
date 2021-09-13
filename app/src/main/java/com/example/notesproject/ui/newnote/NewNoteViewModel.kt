@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.notesproject.SingleLiveEvent
 import com.example.notesproject.Util
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.domain.model.NoteModel
@@ -29,10 +30,8 @@ class NewNoteViewModel @Inject constructor(
 	private val getNoteByIdUseCase: GetNoteByIdUseCase,
 	private val addNoteUseCase: AddNoteUseCase
 ) : BaseViewModel() {
-	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(
-		Events.Initial
-	)
-	val currentEvent: LiveData<Events> = _currentEvent
+	private val _currentEvent: SingleLiveEvent<Events> = SingleLiveEvent()
+	val currentEvent: SingleLiveEvent<Events> = _currentEvent
 
 	val title: MutableLiveData<String> = MutableLiveData()
 

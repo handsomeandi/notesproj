@@ -1,7 +1,7 @@
 package com.example.notesproject.ui.concretenotes
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.notesproject.SingleLiveEvent
 import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.DeleteNoteUseCase
 import com.example.notesproject.domain.usecases.GetNoteByIdUseCase
@@ -16,8 +16,10 @@ class ConcreteNoteViewModel @Inject constructor(
 	private val getNoteByIdUseCase: GetNoteByIdUseCase,
 	private val deleteNoteUseCase: DeleteNoteUseCase
 ) : BaseViewModel() {
-	private val _currentEvent: MutableLiveData<Events> = MutableLiveData(Events.Initial)
-	val currentEvent: LiveData<Events> = _currentEvent
+
+	private val _currentEvent: SingleLiveEvent<in Events> = SingleLiveEvent()
+	val currentEvent
+		get() = _currentEvent
 
 	val note: MutableLiveData<NoteModel> = MutableLiveData()
 //	val note: LiveData<Note> = _note
@@ -28,7 +30,7 @@ class ConcreteNoteViewModel @Inject constructor(
 
 	fun onDeletePressed() {
 		note.value?.id?.let {
-			_currentEvent.value = Events.DeletePressed(it)
+			_currentEvent.value = Events.DeletePressed
 		}
 	}
 
@@ -43,7 +45,7 @@ class ConcreteNoteViewModel @Inject constructor(
 
 	fun onUpdatePressed() {
 		note.value?.id?.let {
-			_currentEvent.value = Events.UpdatePressed(it)
+			_currentEvent.value = Events.UpdatePressed
 		}
 	}
 
@@ -57,8 +59,8 @@ class ConcreteNoteViewModel @Inject constructor(
 
 	sealed class Events {
 		object Initial : Events()
-		class DeletePressed(id: Int) : Events()
+		object UpdatePressed : Events()
+		object DeletePressed : Events()
 		object Deleted : Events()
-		class UpdatePressed(id: Int) : Events()
 	}
 }
