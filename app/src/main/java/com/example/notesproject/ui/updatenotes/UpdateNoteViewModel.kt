@@ -8,7 +8,7 @@ import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.GetNoteByIdUseCase
 import com.example.notesproject.domain.usecases.UpdateNoteUseCase
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.ImageViewModel
+import com.example.notesproject.ui.base.ImageViewModel
 import com.example.notesproject.ui.SingleLiveEvent
 import javax.inject.Inject
 

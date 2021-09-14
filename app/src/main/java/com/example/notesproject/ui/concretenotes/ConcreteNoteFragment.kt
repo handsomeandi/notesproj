@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.notesproject.MainApp
 import com.example.notesproject.databinding.ConcreteNoteFragmentBinding
-import com.example.notesproject.ui.BaseFragment
+import com.example.notesproject.ui.base.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
 import com.example.notesproject.ui.OnImageClickListener
 import javax.inject.Inject
@@ -59,8 +59,8 @@ class ConcreteNoteFragment : BaseFragment<ConcreteNoteFragmentBinding, ConcreteN
 		viewModel.currentEvent.observe(viewLifecycleOwner) {
 			when (it) {
 				is ConcreteNoteViewModel.Events.DeletePressed -> {
-					val alertDialog: AlertDialog? = activity?.let {
-						val builder = AlertDialog.Builder(it)
+					val alertDialog: AlertDialog? = activity?.let { activity ->
+						val builder = AlertDialog.Builder(activity)
 						builder.apply {
 							setPositiveButton("Удалить") { dialog, id ->
 								viewModel.onDelete()

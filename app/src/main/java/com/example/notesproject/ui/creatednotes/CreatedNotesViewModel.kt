@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.GetAllNotesUseCase
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.BaseViewModel
+import com.example.notesproject.ui.base.BaseViewModel
 import com.example.notesproject.ui.SingleLiveEvent
 import javax.inject.Inject
 

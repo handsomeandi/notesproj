@@ -1,4 +1,4 @@
-package com.example.notesproject.ui
+package com.example.notesproject.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

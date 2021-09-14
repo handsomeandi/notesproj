@@ -15,7 +15,7 @@ import com.example.notesproject.data.NoteMapper.toImageObjects
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.databinding.UpdateNoteFragmentBinding
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.BaseFragment
+import com.example.notesproject.ui.base.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
 import com.example.notesproject.ui.OnImageClickListener
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.example.notesproject.ui
+package com.example.notesproject.ui.base
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

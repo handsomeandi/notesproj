@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notesproject.MainApp
 import com.example.notesproject.databinding.CreatedNotesFragmentBinding
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.BaseFragment
+import com.example.notesproject.ui.base.BaseFragment
 import javax.inject.Inject
 
 

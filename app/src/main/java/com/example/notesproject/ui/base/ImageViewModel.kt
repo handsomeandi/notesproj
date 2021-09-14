@@ -1,4 +1,4 @@
-package com.example.notesproject.ui
+package com.example.notesproject.ui.base
 
 import android.content.ContentResolver
 import android.graphics.Bitmap
