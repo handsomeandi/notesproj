@@ -9,10 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.notesproject.MainApp
+import com.example.notesproject.data.NoteMapper.toImageObjects
 import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.databinding.NewNoteFragmentBinding
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.toImageObjects
 import com.example.notesproject.ui.BaseFragment
 import com.example.notesproject.ui.ImagesAdapter
 import com.example.notesproject.ui.OnImageClickListener
@@ -87,7 +87,6 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding, NewNoteViewModel>()
 					}
 				}
 				NewNoteViewModel.Events.ImagesReceived -> {
-//                    binding.ivAddImageAction.visibility = View.GONE
 				}
 				NewNoteViewModel.Events.ImagesLimit -> {
 					Toast.makeText(
@@ -98,9 +97,7 @@ class NewNoteFragment : BaseFragment<NewNoteFragmentBinding, NewNoteViewModel>()
 				}
 
 				is NewNoteViewModel.Events.BackPressed -> {
-					if(findNavController().popBackStack()){
-						logErrorMessage("couldn't navigate")
-					}
+					findNavController().popBackStack()
 				}
 			}
 		}

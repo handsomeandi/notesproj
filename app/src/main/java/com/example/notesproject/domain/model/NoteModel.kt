@@ -7,6 +7,6 @@ data class NoteModel(
 	var noteText: String,
 	val createdDate: String,
 	val updatedDate: String,
-	var images: List<ImageObject>,
+	var images: MutableList<ImageObject>,
 	val id: Int = 0
 )

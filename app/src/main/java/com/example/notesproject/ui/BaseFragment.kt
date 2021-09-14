@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.example.notesproject.R
-import com.example.notesproject.Util.setStatusBarColor
+import com.example.notesproject.setStatusBarColor
 
 abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
 
