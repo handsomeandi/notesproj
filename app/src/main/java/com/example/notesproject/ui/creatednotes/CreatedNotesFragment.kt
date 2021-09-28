@@ -92,5 +92,10 @@ class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding, CreatedNo
 
 		}
 	}
+
+	override fun onStop() {
+		super.onStop()
+		adapter.actionMode?.finish()
+	}
 }
 

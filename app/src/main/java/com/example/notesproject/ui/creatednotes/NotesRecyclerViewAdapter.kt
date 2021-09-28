@@ -23,13 +23,9 @@ class NotesRecyclerViewAdapter constructor(
 	RecyclerView.Adapter<NotesRecyclerViewAdapter.NotesHolder>(), ActionMode.Callback {
 
 	private var multiSelect = false
-		set(value) {
-			field = value
-
-		}
 	private val selectedItems = arrayListOf<NoteModel>()
 
-	private var actionMode: ActionMode? = null
+	var actionMode: ActionMode? = null
 
 	inner class NotesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		private var note: NoteModel? = null
