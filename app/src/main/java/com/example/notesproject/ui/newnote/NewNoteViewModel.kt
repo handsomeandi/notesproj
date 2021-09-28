@@ -7,10 +7,11 @@ import com.example.notesproject.data.model.ImageObject
 import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.AddNoteUseCase
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.base.ImageViewModel
 import com.example.notesproject.ui.SingleLiveEvent
+import com.example.notesproject.ui.base.ImageViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers.io
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 
@@ -28,7 +29,13 @@ class NewNoteViewModel @Inject constructor(
 
 
 	fun onAddPressed() {
-		val note = NoteModel(title.value ?: "", body.value ?: "", "", "", images.value ?: mutableListOf())
+		val note = NoteModel(
+			title.value ?: "",
+			body.value ?: "",
+			DateTime.now().toString(),
+			DateTime.now().toString(),
+			images.value ?: mutableListOf()
+		)
 		if (note.title.isEmpty() || note.noteText.isEmpty()) return
 		addNoteUseCase.execute(note).subscribeOn(io()).observeOn(AndroidSchedulers.mainThread())
 			.subscribe(

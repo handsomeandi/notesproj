@@ -8,8 +8,9 @@ import com.example.notesproject.domain.model.NoteModel
 import com.example.notesproject.domain.usecases.GetNoteByIdUseCase
 import com.example.notesproject.domain.usecases.UpdateNoteUseCase
 import com.example.notesproject.logErrorMessage
-import com.example.notesproject.ui.base.ImageViewModel
 import com.example.notesproject.ui.SingleLiveEvent
+import com.example.notesproject.ui.base.ImageViewModel
+import org.joda.time.DateTime
 import javax.inject.Inject
 
 class UpdateNoteViewModel @Inject constructor(
@@ -49,7 +50,14 @@ class UpdateNoteViewModel @Inject constructor(
 
 	fun onSavePressed(contentResolver: ContentResolver) {
 		note.value?.let { note ->
-			val updatedNote = NoteModel(note.title, note.noteText, "", "", images.value ?: note.images, note.id)
+			val updatedNote = NoteModel(
+				note.title,
+				note.noteText,
+				note.createdDate,
+				DateTime.now().toString(),
+				images.value ?: note.images,
+				note.id
+			)
 			updateImages(note.images, updatedNote.images, contentResolver).subscribeIoObserveMain(
 				{
 					updateNoteUseCase.execute(updatedNote).subscribeIoObserveMain(

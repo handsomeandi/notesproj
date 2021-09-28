@@ -1,5 +1,6 @@
 package com.example.notesproject.ui.creatednotes
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -105,6 +106,7 @@ class NotesRecyclerViewAdapter constructor(
 		}
 	}
 
+	@SuppressLint("NotifyDataSetChanged")
 	fun setItems(notes: List<NoteModel>) {
 		notesList = (ArrayList(notes))
 		notifyDataSetChanged()
@@ -135,7 +137,6 @@ class NotesRecyclerViewAdapter constructor(
 	override fun onDestroyActionMode(mode: ActionMode?) {
 		multiSelect = false
 		selectedItems.clear()
-		notifyDataSetChanged()
 	}
 }
 

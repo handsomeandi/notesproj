@@ -17,14 +17,14 @@ abstract class BaseViewModel : ViewModel() {
 	private fun Disposable.addToDisposables() = disposables.add(this)
 
 
-	fun <T> Single<T>.subscribeIoObserveMain(
+	fun <T : Any> Single<T>.subscribeIoObserveMain(
 		successCallback: Consumer<T>,
 		errorCallback: Consumer<Throwable>
 	) = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
 		successCallback, errorCallback
 	).addToDisposables()
 
-	fun <T> Observable<T>.subscribeIoObserveMain(
+	fun <T : Any> Observable<T>.subscribeIoObserveMain(
 		successCallback: Consumer<T>,
 		errorCallback: Consumer<Throwable>
 	) = subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(

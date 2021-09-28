@@ -24,11 +24,11 @@ data class ImageObject(
 class Converter {
 	@TypeConverter
 	fun convertImagesToJson(imageObject: List<ImageObject>): String =
-		Gson().toJson(imageObject)
+		if (imageObject.isNotEmpty()) Gson().toJson(imageObject) else ""
 
 	@TypeConverter
 	fun convertJsonToImages(json: String): List<ImageObject> {
 		val listType = object : TypeToken<List<ImageObject>>() {}.type
-		return Gson().fromJson(json, listType)
+		if (json.isNotEmpty()) return Gson().fromJson(json, listType) else return mutableListOf()
 	}
 }
