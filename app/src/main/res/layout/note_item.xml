@@ -4,19 +4,15 @@
     <data>
 
         <variable
-            name="onNoteClickListener"
-            type="com.example.notesproject.ui.creatednotes.OnNoteClickListener" />
-
-        <variable
             name="noteCard"
             type="com.example.notesproject.domain.model.NoteModel" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cvNoteCard"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:onClick="@{() -> onNoteClickListener.onClick(noteCard.id)}">
+        android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/tvCardNoteTitle"

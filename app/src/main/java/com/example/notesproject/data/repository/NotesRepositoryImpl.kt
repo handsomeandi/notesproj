@@ -8,14 +8,16 @@ import javax.inject.Inject
 
 class NotesRepositoryImpl @Inject constructor(private val localNoteSource: LocalNoteSource) : NotesRepository {
 
-    override fun getAllNotes() = localNoteSource.getAllNotes()
+	override fun getAllNotes() = localNoteSource.getAllNotes()
 
-    override fun getNoteById(id: Int) = localNoteSource.getNoteById(id)
+	override fun getNoteById(id: Int) = localNoteSource.getNoteById(id)
 
-    override fun addNote(noteEntity: NoteModel) = localNoteSource.addNote(noteEntity)
+	override fun addNote(noteEntity: NoteModel) = localNoteSource.addNote(noteEntity)
 
-    override fun deleteNote(noteEntity: NoteModel) = localNoteSource.deleteNote(noteEntity)
+	override fun deleteNote(noteEntity: NoteModel) = localNoteSource.deleteNote(noteEntity)
 
-    override fun updateNote(noteEntity: NoteModel) = localNoteSource.updateNote(noteEntity)
+	override fun deleteNotes(notes: List<NoteModel>) = localNoteSource.deleteNotes(notes)
+
+	override fun updateNote(noteEntity: NoteModel) = localNoteSource.updateNote(noteEntity)
 
 }

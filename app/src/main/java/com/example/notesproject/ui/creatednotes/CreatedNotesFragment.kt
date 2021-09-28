@@ -1,7 +1,9 @@
 package com.example.notesproject.ui.creatednotes
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -30,11 +32,11 @@ class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding, CreatedNo
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		MainApp.instance.appComponent?.inject(this)
-		adapter = NotesRecyclerViewAdapter { id ->
-			viewModel.onNotePressed(id)
-
-		}
-		with(binding) {
+		adapter = NotesRecyclerViewAdapter(requireActivity() as AppCompatActivity,
+			{ id -> viewModel.onNotePressed(id) },
+			{ notes -> viewModel.onDeletePressed(notes) })
+		with(binding)
+		{
 			rvNotes.apply {
 				layoutManager =
 					LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
@@ -70,6 +72,21 @@ class CreatedNotesFragment : BaseFragment<CreatedNotesFragmentBinding, CreatedNo
 					} catch (e: Exception) {
 						logErrorMessage(e.message)
 					}
+				}
+				is CreatedNotesViewModel.Events.DeletePressed -> {
+					val notes = it.notesList.toMutableList()
+					val alertDialog: AlertDialog? = AlertDialog.Builder(this.context).apply {
+						setPositiveButton("Удалить") { dialog, id ->
+							viewModel.onDelete(notes)
+						}
+						setNegativeButton("Отмена") { dialog, id ->
+							dialog.dismiss()
+						}
+					}.create()
+					alertDialog?.show()
+				}
+				CreatedNotesViewModel.Events.Deleted -> {
+
 				}
 			}
 

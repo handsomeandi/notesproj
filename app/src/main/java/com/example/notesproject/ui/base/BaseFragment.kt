@@ -30,6 +30,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
 
 	override fun onResume() {
 		super.onResume()
-		activity?.setStatusBarColor(R.color.white, false)
+		activity?.setStatusBarColor(R.color.black, true)
 	}
 }

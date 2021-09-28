@@ -23,5 +23,7 @@ class LocalNoteSource @Inject constructor(private val dao: NoteDao) {
 
 	fun deleteNote(noteModel: NoteModel) = dao.deleteNote(noteModel.toEntity())
 
+	fun deleteNotes(notes: List<NoteModel>) = dao.deleteNotes(notes.map { it.toEntity() })
+
 	fun updateNote(noteModel: NoteModel) = dao.updateNote(noteModel.toEntity())
 }
